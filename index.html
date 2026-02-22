@@ -450,49 +450,25 @@
 // ════════════════════════════════════════════════════════
 //  CONFIGURACIÓN
 // ════════════════════════════════════════════════════════
-const SHEET_ID      = '1ovxppIPcKGf0KC7SQd0HQcuUfS4PU7lljr4DUH559Mo';
-const SHEET_ID_PUBL = '2PACX-1vQSHycVQwzm5dNKkjNfIWZUQoDOTPsIqyN-YZsNbUS2ZLVRzdH6OrwDU1r7j_opej6rI9P-dzXMYvSX';
+// ════════════════════════════════════════════════════
+//  CONFIGURACIÓN — pega aquí tu URL de Apps Script
+//  después de desplegar proxy_modales.gs como webapp
+// ════════════════════════════════════════════════════
+const PROXY_URL = 'https://script.google.com/macros/s/AKfycby3EJ4UQy5-V3cLrFzeT3BtOsUf0hnGAHlDpZPpkmTuJ3RcByEyWcBRks6tPj_HbUy9/exec';
 
-// Cache en memoria para no hacer fetch repetidos
 const cache = {};
 
-// ─────────────────────────────────────────────────────────
-//  Lee una pestaña completa y devuelve un objeto {campo:valor}
-//  Intenta primero con el ID original (gviz), si falla usa el ID publicado
-// ─────────────────────────────────────────────────────────
 async function fetchModalData(pestana) {
     if (cache[pestana]) return cache[pestana];
 
-    // URL con ID original — funciona cuando la Sheet está publicada en la web
-    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(pestana)}`;
+    const url  = `${PROXY_URL}?modal=${encodeURIComponent(pestana)}`;
+    const res  = await fetch(url);
+    const json = await res.json();
 
-    let text;
-    try {
-        const res = await fetch(url);
-        text = await res.text();
-        // Verifica que la respuesta tenga el formato JSONP esperado
-        if (!text.includes('google.visualization.Query.setResponse')) throw new Error('Formato inesperado');
-    } catch(e) {
-        // Fallback: usa el ID publicado
-        const urlPubl = `https://docs.google.com/spreadsheets/d/e/${SHEET_ID_PUBL}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(pestana)}`;
-        const res2 = await fetch(urlPubl);
-        text = await res2.text();
-    }
+    if (!json.ok) throw new Error(json.error || 'Error al leer la Sheet');
 
-    // Google devuelve JSONP — extraemos el JSON puro
-    const json = JSON.parse(text.match(/google\.visualization\.Query\.setResponse\(([\s\S]*)\);/)[1]);
-    const rows  = json.table.rows;
-
-    const data = {};
-    rows.forEach(row => {
-        if (!row.c || !row.c[0] || !row.c[1]) return;
-        const campo = row.c[0].v;
-        const valor = row.c[1].v;
-        if (campo && valor) data[campo] = valor;
-    });
-
-    cache[pestana] = data;
-    return data;
+    cache[pestana] = json.data;
+    return json.data;
 }
 
 // ─────────────────────────────────────────────────────────
