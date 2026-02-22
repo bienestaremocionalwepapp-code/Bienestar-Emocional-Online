@@ -461,9 +461,17 @@ const cache = {};
 async function fetchModalData(pestana) {
     if (cache[pestana]) return cache[pestana];
 
-    const url  = `${PROXY_URL}?modal=${encodeURIComponent(pestana)}`;
-    const res  = await fetch(url);
-    const json = await res.json();
+    const url = `${PROXY_URL}?modal=${encodeURIComponent(pestana)}`;
+    const res = await fetch(url, { redirect: 'follow' });
+    const text = await res.text();
+
+    let json;
+    try {
+        json = JSON.parse(text);
+    } catch(e) {
+        console.error('Respuesta no es JSON:', text.substring(0, 300));
+        throw new Error('Respuesta inesperada del servidor');
+    }
 
     if (!json.ok) throw new Error(json.error || 'Error al leer la Sheet');
 
