@@ -391,7 +391,7 @@
         </div>
         <div style="padding:20px; background:white; border-radius:10px; box-shadow:0 2px 10px rgba(0,0,0,0.05);">
             <strong style="font-size:1.2em; display:block; margin-bottom:8px;">📧 Correo</strong>
-            <a href="mailto:Bienestaremocional58@gmail.com" style="color:#007BFF; font-size:1.1em; text-decoration:none; font-weight:bold; word-break:break-all;">Bienestaremocional58@gmail.com</a>
+            <a href="/cdn-cgi/l/email-protection#95d7fcf0fbf0e6e1f4e7f0f8faf6fcfafbf4f9a0add5f2f8f4fcf9bbf6faf8" style="color:#007BFF; font-size:1.1em; text-decoration:none; font-weight:bold; word-break:break-all;"><span class="__cf_email__" data-cfemail="8ac8e3efe4eff9feebf8efe7e5e9e3e5e4ebe6bfb2caede7ebe3e6a4e9e5e7">[email&#160;protected]</span></a>
         </div>
         <div style="padding:20px; background:white; border-radius:10px; box-shadow:0 2px 10px rgba(0,0,0,0.05);">
             <strong style="font-size:1.2em; display:block; margin-bottom:8px;">🕐 Horario</strong>
@@ -446,24 +446,38 @@
     </div>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ════════════════════════════════════════════════════════
-//  CONFIGURACIÓN — solo cambia el SHEET_ID si es necesario
+//  CONFIGURACIÓN
 // ════════════════════════════════════════════════════════
-const SHEET_ID = '1ovxppIPcKGf0KC7SQd0HQcuUfS4PU7lljr4DUH559Mo';
+const SHEET_ID      = '1ovxppIPcKGf0KC7SQd0HQcuUfS4PU7lljr4DUH559Mo';
+const SHEET_ID_PUBL = '2PACX-1vQSHycVQwzm5dNKkjNfIWZUQoDOTPsIqyN-YZsNbUS2ZLVRzdH6OrwDU1r7j_opej6rI9P-dzXMYvSX';
 
 // Cache en memoria para no hacer fetch repetidos
 const cache = {};
 
 // ─────────────────────────────────────────────────────────
 //  Lee una pestaña completa y devuelve un objeto {campo:valor}
+//  Intenta primero con el ID original (gviz), si falla usa el ID publicado
 // ─────────────────────────────────────────────────────────
 async function fetchModalData(pestana) {
     if (cache[pestana]) return cache[pestana];
 
+    // URL con ID original — funciona cuando la Sheet está publicada en la web
     const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(pestana)}`;
-    const res  = await fetch(url);
-    const text = await res.text();
+
+    let text;
+    try {
+        const res = await fetch(url);
+        text = await res.text();
+        // Verifica que la respuesta tenga el formato JSONP esperado
+        if (!text.includes('google.visualization.Query.setResponse')) throw new Error('Formato inesperado');
+    } catch(e) {
+        // Fallback: usa el ID publicado
+        const urlPubl = `https://docs.google.com/spreadsheets/d/e/${SHEET_ID_PUBL}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(pestana)}`;
+        const res2 = await fetch(urlPubl);
+        text = await res2.text();
+    }
 
     // Google devuelve JSONP — extraemos el JSON puro
     const json = JSON.parse(text.match(/google\.visualization\.Query\.setResponse\(([\s\S]*)\);/)[1]);
@@ -471,7 +485,7 @@ async function fetchModalData(pestana) {
 
     const data = {};
     rows.forEach(row => {
-        if (!row.c[0] || !row.c[1]) return;
+        if (!row.c || !row.c[0] || !row.c[1]) return;
         const campo = row.c[0].v;
         const valor = row.c[1].v;
         if (campo && valor) data[campo] = valor;
@@ -565,9 +579,4 @@ function generateQR() {
     const q=document.getElementById('qrCode');
     q.innerHTML='<p style="margin-bottom:1rem;color:var(--morado-intenso);font-weight:600;">Escanea el código QR:</p>';
     q.style.display='block';
-    const d=document.createElement('div'); q.appendChild(d);
-    new QRCode(d,{text:'https://bienestaremocionalwepapp-code.github.io/BienestarEmocional/',width:200,height:200,colorDark:'#000000',colorLight:'#FFFFFF',correctLevel:QRCode.CorrectLevel.H});
-}
-</script>
-</body>
-</html>
+    const d=docum
