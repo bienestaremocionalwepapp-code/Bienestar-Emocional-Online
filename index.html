@@ -1,536 +1,1094 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-    <title>Bienestar Emocional</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    <style>
-        :root {
-            --rosa-claro: #FFE5F0;
-            --rosa-medio: #FFB6D9;
-            --rosa-intenso: #FF85C0;
-            --morado-claro: #E8D5FF;
-            --morado-medio: #C5A3FF;
-            --morado-intenso: #A67FFF;
-            --texto-oscuro: #2D2A3D;
-            --texto-medio: #5A5570;
-            --blanco: #FFFFFF;
-            --whatsapp: #25D366;
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; font-size: 16px; color: var(--texto-oscuro); line-height: 1.6; background: linear-gradient(135deg, var(--rosa-claro) 0%, var(--morado-claro) 100%); padding-bottom: 80px; }
-
-        /* ── HEADER ── */
-        header { background: var(--blanco); padding: 1.5rem 1rem; text-align: center; box-shadow: 0 4px 20px rgba(197,163,255,0.2); animation: slideDown 0.6s ease-out; }
-        @keyframes slideDown { from { opacity:0; transform:translateY(-30px); } to { opacity:1; transform:translateY(0); } }
-        .logo { max-width: 150px; height: auto; margin-bottom: 0.8rem; border-radius: 12px; box-shadow: 0 4px 16px rgba(166,127,255,0.2); }
-        h1 { font-family: 'Outfit', sans-serif; font-size: 1.8rem; color: var(--morado-intenso); margin-bottom: 0.5rem; font-weight: 700; }
-        header p { color: var(--texto-medio); font-size: 0.95rem; }
-
-        /* ── SECTIONS ── */
-        @keyframes fadeInUp { from { opacity:0; transform:translateY(40px); } to { opacity:1; transform:translateY(0); } }
-        .hero { background: var(--blanco); padding: 2rem 1.5rem; margin: 1.5rem 1rem; border-radius: 20px; box-shadow: 0 8px 32px rgba(197,163,255,0.15); animation: fadeInUp 0.8s ease-out; animation-delay:0.1s; animation-fill-mode:both; }
-        .section { background: var(--blanco); padding: 2rem 1.5rem; margin: 1.5rem 1rem; border-radius: 20px; box-shadow: 0 8px 32px rgba(197,163,255,0.15); animation: fadeInUp 0.8s ease-out; animation-fill-mode:both; }
-        h2 { font-family: 'Outfit', sans-serif; font-size: 1.6rem; color: var(--morado-intenso); margin-bottom: 1.5rem; text-align: center; position: relative; display: inline-block; width: 100%; }
-        h2::after { content:''; position:absolute; bottom:-8px; left:50%; transform:translateX(-50%); width:80px; height:4px; background:linear-gradient(90deg, var(--rosa-intenso), var(--morado-medio)); border-radius:2px; }
-
-        /* ── SERVICE CARDS ── */
-        .servicios-buttons { display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin: 2rem 0; }
-        .service-card { background: var(--blanco); border-radius: 16px; overflow: hidden; box-shadow: 0 8px 24px rgba(197,163,255,0.2); transition: all 0.3s ease; cursor: pointer; }
-        .service-card:active { transform:translateY(-5px); box-shadow:0 12px 32px rgba(197,163,255,0.35); }
-        .service-card-image { width:100%; height:200px; object-fit:cover; background:linear-gradient(135deg, var(--rosa-claro), var(--morado-claro)); display:block; }
-        .service-card-content { padding:1.5rem; text-align:center; }
-        .service-card-title { font-family:'Outfit',sans-serif; font-size:1.3rem; color:var(--morado-intenso); margin-bottom:1rem; font-weight:600; }
-        .service-card-button { display:inline-block; background:linear-gradient(135deg, var(--rosa-intenso), var(--morado-intenso)); color:var(--blanco); padding:0.8rem 2rem; border-radius:50px; font-family:'Outfit',sans-serif; font-size:1rem; font-weight:600; border:none; cursor:pointer; transition:all 0.3s ease; box-shadow:0 4px 12px rgba(197,163,255,0.4); }
-        .service-card-button:active { transform:scale(0.98); }
-        .badge-eval { display:inline-block; background:linear-gradient(135deg, var(--rosa-intenso), var(--morado-intenso)); color:white; font-size:0.75rem; font-family:'Outfit',sans-serif; font-weight:700; padding:0.25rem 0.8rem; border-radius:50px; margin-bottom:0.7rem; letter-spacing:0.05em; text-transform:uppercase; }
-
-        /* ── MODAL ── */
-        .modal { display:none; position:fixed; z-index:1000; left:0; top:0; width:100%; height:100%; background:rgba(45,42,61,0.9); backdrop-filter:blur(8px); overflow-y:auto; -webkit-overflow-scrolling:touch; }
-        .modal-content { background:var(--blanco); margin:5% auto; padding:2rem 1.5rem; border-radius:20px; max-width:95%; width:500px; box-shadow:0 20px 60px rgba(0,0,0,0.3); animation:slideUp 0.4s ease-out; position:relative; max-height:90vh; overflow-y:auto; }
-        @keyframes slideUp { from { opacity:0; transform:translateY(60px) scale(0.9); } to { opacity:1; transform:translateY(0) scale(1); } }
-        .modal-image { width:100%; max-height:250px; object-fit:cover; border-radius:12px; margin-bottom:1.5rem; box-shadow:0 4px 16px rgba(197,163,255,0.2); display:block; }
-        .close { position:absolute; right:1.5rem; top:1.5rem; color:var(--texto-medio); font-size:2rem; font-weight:bold; cursor:pointer; line-height:1; transition:all 0.3s ease; width:35px; height:35px; display:flex; align-items:center; justify-content:center; border-radius:50%; z-index:10; }
-        .close:active { background:var(--rosa-claro); color:var(--rosa-intenso); transform:rotate(90deg); }
-        .modal h3 { font-family:'Outfit',sans-serif; font-size:1.5rem; color:var(--morado-intenso); margin:0 0 1.5rem; padding-right:2.5rem; line-height:1.3; }
-        .modal p { font-size:0.95rem; margin-bottom:1.2rem; line-height:1.7; }
-        .modal ul { padding-left:1.5rem; margin-bottom:1.2rem; }
-        .modal li { margin-bottom:0.8rem; line-height:1.6; font-size:0.9rem; }
-        .modal strong { color:var(--morado-intenso); font-weight:600; }
-        .cta-button { display:inline-block; background:linear-gradient(135deg, var(--rosa-intenso), var(--morado-intenso)); color:var(--blanco); padding:1rem 2rem; border-radius:50px; text-decoration:none; font-family:'Outfit',sans-serif; font-size:1.1rem; font-weight:600; margin-top:1rem; transition:all 0.3s ease; box-shadow:0 4px 16px rgba(197,163,255,0.4); text-align:center; display:block; }
-        .cta-button:active { transform:scale(0.98); }
-        .modal-section-label { font-family:'Outfit',sans-serif; font-size:1rem; font-weight:700; color:var(--morado-intenso); background:linear-gradient(135deg, var(--rosa-claro), var(--morado-claro)); border-radius:8px; padding:0.5rem 1rem; margin:1.2rem 0 0.8rem; display:block; }
-        .eval-areas-grid { display:grid; grid-template-columns:1fr 1fr; gap:0.6rem; margin:1rem 0 1.2rem; }
-        .eval-area-item { background:linear-gradient(135deg, var(--rosa-claro), var(--morado-claro)); border-radius:10px; padding:0.7rem 0.9rem; font-size:0.85rem; font-weight:600; color:var(--morado-intenso); font-family:'Outfit',sans-serif; text-align:center; border-left:3px solid var(--morado-intenso); }
-        .modal-loading { text-align:center; padding:3rem 1rem; }
-        .modal-loading .spinner { width:48px; height:48px; border:5px solid var(--morado-claro); border-top-color:var(--morado-intenso); border-radius:50%; animation:spin 0.8s linear infinite; margin:0 auto 1rem; }
-        @keyframes spin { to { transform:rotate(360deg); } }
-        .modal-loading p { color:var(--texto-medio); font-family:'Outfit',sans-serif; }
-
-        /* ── MAPA ── */
-        .mapa-wrap { width:90%; max-width:1200px; margin:40px auto; padding:15px; background:white; border:1px solid #ddd; border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.1); overflow:hidden; }
-        .mapa-wrap iframe { width:100%; height:500px; border:0; display:block; }
-        .mapa-footer { padding:20px 10px 10px; text-align:center; border-top:1px solid #eee; margin-top:10px; }
-        .mapa-footer h3 { margin:0 0 10px; color:#333; font-size:1.4em; }
-        .mapa-footer p { margin:0 0 15px; color:#555; }
-        .mapa-btn { display:inline-block; padding:12px 30px; background-color:#4285F4; color:white; text-decoration:none; font-size:1.1em; font-weight:bold; border-radius:8px; }
-
-        /* ── CONTACTO ── */
-        .contacto-wrap { max-width:800px; margin:40px auto; padding:20px; background:#f9f9f9; border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.08); }
-        .contacto-wrap h2 { text-align:center; color:#333; margin-bottom:25px; }
-        .contacto-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:25px; text-align:center; }
-        .contacto-item { padding:20px; background:white; border-radius:10px; box-shadow:0 2px 10px rgba(0,0,0,0.05); }
-        .contacto-item strong { font-size:1.2em; display:block; margin-bottom:8px; }
-        .contacto-item a { color:#007BFF; font-size:1.1em; text-decoration:none; font-weight:bold; word-break:break-all; }
-        .contacto-item p { margin:0; font-size:1.1em; color:#555; }
-
-        /* ── SOCIAL ── */
-        .social-links { display:flex; flex-direction:column; gap:1rem; margin-top:1.5rem; justify-content:center; padding:0 1rem; }
-        .social-links a { color:var(--blanco); font-size:1.05rem; text-decoration:none; padding:1rem 2rem; background:linear-gradient(135deg, var(--rosa-intenso), var(--morado-intenso)); border-radius:50px; transition:all 0.3s ease; box-shadow:0 4px 12px rgba(197,163,255,0.4); font-family:'Outfit',sans-serif; font-weight:600; text-align:center; }
-
-        /* ── FOOTER ── */
-        footer { background:var(--morado-intenso); color:var(--blanco); text-align:center; padding:1.5rem 1rem; margin-top:2rem; font-family:'Outfit',sans-serif; font-size:0.9rem; }
-
-        /* ── FLOAT BUTTONS ── */
-        .floating-buttons { position:fixed; bottom:20px; right:20px; display:flex; flex-direction:column; gap:12px; z-index:9999; }
-        .whatsapp-float { width:60px; height:60px; background:var(--whatsapp); border-radius:50%; box-shadow:0 4px 20px rgba(37,211,102,0.5); display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all 0.3s ease; text-decoration:none; animation:pulse 2s infinite; }
-        .whatsapp-float svg { width:35px; height:35px; fill:white; }
-        @keyframes pulse { 0% { box-shadow:0 4px 20px rgba(37,211,102,0.5); } 50% { box-shadow:0 4px 30px rgba(37,211,102,0.8); } 100% { box-shadow:0 4px 20px rgba(37,211,102,0.5); } }
-        .share-float { width:60px; height:60px; background:linear-gradient(135deg, var(--rosa-intenso), var(--morado-intenso)); border-radius:50%; box-shadow:0 4px 20px rgba(166,127,255,0.5); display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all 0.3s ease; border:none; }
-        .share-float svg { width:32px; height:32px; fill:white; }
-
-        /* ── SHARE MODAL ── */
-        .share-modal { display:none; position:fixed; z-index:10000; left:0; top:0; width:100%; height:100%; background:rgba(45,42,61,0.9); backdrop-filter:blur(8px); }
-        .share-modal-content { background:var(--blanco); margin:20% auto; padding:2rem; border-radius:20px; max-width:90%; width:400px; box-shadow:0 20px 60px rgba(0,0,0,0.3); animation:slideUp 0.4s ease-out; position:relative; }
-        .share-modal h3 { font-family:'Outfit',sans-serif; font-size:1.5rem; color:var(--morado-intenso); margin-bottom:1.5rem; text-align:center; }
-        .share-options { display:grid; grid-template-columns:repeat(2,1fr); gap:1rem; margin-top:1.5rem; }
-        .share-option { background:linear-gradient(135deg, var(--rosa-claro), var(--morado-claro)); padding:1.2rem; border-radius:12px; text-align:center; cursor:pointer; transition:all 0.3s ease; border:none; font-family:'Outfit',sans-serif; font-size:0.9rem; color:var(--texto-oscuro); font-weight:600; }
-        .share-option svg { width:32px; height:32px; margin-bottom:0.5rem; fill:var(--morado-intenso); display:block; margin-left:auto; margin-right:auto; }
-        #qrCode { text-align:center; margin-top:1rem; padding:1rem; background:var(--rosa-claro); border-radius:12px; display:none; }
-        #qrCode canvas { margin:0 auto; display:block; }
-
-        /* ── SKELETON LOADER ── */
-        .skel { background:linear-gradient(90deg,#ede8ff 25%,#e8d5ff 50%,#ede8ff 75%); background-size:200% 100%; animation:skelMove 1.5s infinite; border-radius:8px; }
-        @keyframes skelMove { 0%{background-position:200% 0;} 100%{background-position:-200% 0;} }
-
-        /* ── RESPONSIVE ── */
-        @media (min-width:768px) {
-            h1 { font-size:2.2rem; } h2 { font-size:1.8rem; }
-            .hero,.section { max-width:900px; margin-left:auto; margin-right:auto; padding:2.5rem 2rem; }
-            .servicios-buttons { grid-template-columns:repeat(2,1fr); gap:2rem; }
-            .social-links { flex-direction:row; }
-            .modal-content { max-width:700px; padding:2.5rem 2rem; }
-        }
-        @media (min-width:1024px) {
-            h1 { font-size:2.5rem; } h2 { font-size:2rem; }
-            .hero,.section { max-width:1200px; padding:3rem 2rem; }
-            .servicios-buttons { grid-template-columns:repeat(4,1fr); gap:2rem; }
-            .service-card:hover { transform:translateY(-8px); box-shadow:0 16px 40px rgba(197,163,255,0.4); }
-            .service-card-button:hover { transform:scale(1.05); }
-            .whatsapp-float:hover,.share-float:hover { transform:scale(1.1); }
-            .cta-button:hover { transform:translateY(-3px); box-shadow:0 8px 24px rgba(197,163,255,0.6); }
-            .floating-buttons { bottom:30px; right:30px; }
-            .whatsapp-float,.share-float { width:70px; height:70px; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Editor — Bienestar Emocional</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Manrope:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--rp:#FFE5F0;--ri:#FF85C0;--mp:#E8D5FF;--mi:#A67FFF;--dark:#12101e;--dark2:#1e1b2e;--card:#ffffff;--bg:#f5f2ff;--border:#ede8ff;--mid:#5A5570;--text:#2D2A3D;--ok:#22c55e;--err:#ef4444;--warn:#f59e0b;--mono:'DM Mono',monospace;--radius:14px;--topbar:57px;--sidebar:230px;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Manrope',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+#loginScreen{position:fixed;inset:0;z-index:9999;background:var(--dark);display:flex;align-items:center;justify-content:center;}
+#loginScreen.hidden{display:none;}
+.l-orb{position:absolute;border-radius:50%;filter:blur(90px);pointer-events:none;animation:orbFloat 10s ease-in-out infinite alternate;}
+.l-orb1{width:600px;height:600px;background:rgba(166,127,255,.15);top:-200px;left:-150px;animation-duration:9s;}
+.l-orb2{width:500px;height:500px;background:rgba(255,133,192,.12);bottom:-150px;right:-100px;animation-duration:12s;}
+@keyframes orbFloat{to{transform:translate(50px,70px);}}
+.l-card{position:relative;z-index:2;width:420px;max-width:94vw;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:26px;padding:2.8rem 2.4rem 2.4rem;backdrop-filter:blur(28px);box-shadow:0 40px 100px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.08);animation:cardIn .5s cubic-bezier(.16,1,.3,1);}
+@keyframes cardIn{from{opacity:0;transform:translateY(32px) scale(.96);}to{opacity:1;transform:none;}}
+.l-head{text-align:center;margin-bottom:2.2rem;}
+.l-icon{width:68px;height:68px;border-radius:20px;margin:0 auto 1rem;background:linear-gradient(135deg,var(--ri),var(--mi));display:flex;align-items:center;justify-content:center;font-size:1.9rem;box-shadow:0 10px 30px rgba(166,127,255,.45);animation:iconGlow 3s ease-in-out infinite;}
+@keyframes iconGlow{0%,100%{box-shadow:0 10px 30px rgba(166,127,255,.45);}50%{box-shadow:0 10px 50px rgba(166,127,255,.75);}}
+.l-title{font-family:'Syne',sans-serif;font-size:1.55rem;font-weight:800;color:#fff;letter-spacing:-.02em;}
+.l-sub{font-size:.82rem;color:rgba(255,255,255,.3);margin-top:.3rem;}
+.l-group{margin-bottom:1.1rem;}
+.l-label{display:block;font-size:.7rem;font-weight:700;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.45rem;}
+.l-wrap{position:relative;}
+.l-ico{position:absolute;left:.95rem;top:50%;transform:translateY(-50%);font-size:.95rem;opacity:.35;pointer-events:none;}
+.l-inp{width:100%;padding:.85rem 2.7rem;background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.1);border-radius:12px;font-family:'Manrope',sans-serif;font-size:.95rem;color:#fff;outline:none;transition:all .25s;}
+.l-inp::placeholder{color:rgba(255,255,255,.2);}
+.l-inp:focus{border-color:var(--mi);background:rgba(166,127,255,.1);box-shadow:0 0 0 3px rgba(166,127,255,.15);}
+.l-inp.bad{border-color:var(--err);animation:shake .4s ease;}
+@keyframes shake{0%,100%{transform:translateX(0);}20%,60%{transform:translateX(-5px);}40%,80%{transform:translateX(5px);}}
+.l-eye{position:absolute;right:.9rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1rem;color:rgba(255,255,255,.25);transition:color .2s;}
+.l-eye:hover{color:rgba(255,255,255,.6);}
+.l-btn{width:100%;padding:1rem;border:none;border-radius:13px;margin-top:.4rem;background:linear-gradient(135deg,var(--ri),var(--mi));color:#fff;font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;cursor:pointer;box-shadow:0 4px 20px rgba(166,127,255,.4);transition:all .25s;}
+.l-btn:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(166,127,255,.6);}
+.l-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+.spin{display:inline-block;width:16px;height:16px;border:2.5px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:sp .7s linear infinite;vertical-align:middle;margin-right:.4rem;}
+@keyframes sp{to{transform:rotate(360deg);}}
+.l-err{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);border-radius:10px;padding:.7rem 1rem;font-size:.83rem;color:#fca5a5;margin-top:.9rem;display:none;}
+.l-err.show{display:block;animation:shake .4s ease;}
+.l-att{text-align:center;font-size:.75rem;color:rgba(255,255,255,.2);margin-top:1rem;}
+.l-att b{color:var(--ri);}
+#app{display:none;min-height:100vh;flex-direction:column;}
+#app.on{display:flex;}
+.topbar{background:var(--card);border-bottom:1px solid var(--border);padding:.85rem 1.8rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 2px 16px rgba(166,127,255,.08);height:var(--topbar);}
+.tb-l{display:flex;align-items:center;gap:.9rem;}
+.tb-logo{width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,var(--ri),var(--mi));display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
+.tb-brand{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:800;color:var(--text);}
+.tb-brand span{color:var(--mi);}
+.tb-r{display:flex;align-items:center;gap:.65rem;}
+.uchip{display:flex;align-items:center;gap:.45rem;background:var(--bg);border:1px solid var(--border);border-radius:50px;padding:.3rem .85rem .3rem .4rem;}
+.uav{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--ri),var(--mi));display:flex;align-items:center;justify-content:center;font-size:.75rem;color:#fff;font-weight:700;flex-shrink:0;}
+.uname{font-size:.82rem;font-weight:600;}
+.urole{font-size:.67rem;color:var(--mid);}
+.shell{display:flex;flex:1;min-height:0;}
+.sidebar{width:var(--sidebar);flex-shrink:0;background:linear-gradient(160deg,var(--dark2),var(--dark));padding:1.2rem 0;display:flex;flex-direction:column;position:sticky;top:var(--topbar);height:calc(100vh - var(--topbar));overflow-y:auto;}
+.nav-sec{padding:.5rem 1.2rem .3rem;font-size:.63rem;font-weight:700;color:rgba(255,255,255,.25);text-transform:uppercase;letter-spacing:.12em;margin-top:.5rem;}
+.nav-item{display:flex;align-items:center;gap:.7rem;padding:.7rem 1.4rem;cursor:pointer;color:rgba(255,255,255,.5);font-size:.88rem;font-weight:500;transition:all .2s;border-left:3px solid transparent;user-select:none;}
+.nav-item:hover{color:#fff;background:rgba(255,255,255,.05);}
+.nav-item.on{color:#fff;background:rgba(166,127,255,.15);border-left-color:var(--mi);}
+.nav-item .ni{font-size:1rem;width:1.3rem;text-align:center;flex-shrink:0;}
+.main{flex:1;padding:1.8rem;overflow-y:auto;min-width:0;}
+.page{display:none;}
+.page.on{display:block;animation:fadeUp .25s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+.btn{display:inline-flex;align-items:center;gap:.45rem;padding:.55rem 1.2rem;border-radius:50px;font-family:'Manrope',sans-serif;font-size:.84rem;font-weight:600;cursor:pointer;border:none;transition:all .2s;white-space:nowrap;}
+.btn-primary{background:linear-gradient(135deg,var(--ri),var(--mi));color:#fff;box-shadow:0 4px 14px rgba(166,127,255,.35);}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 22px rgba(166,127,255,.5);}
+.btn-primary:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+.btn-ghost{background:transparent;color:var(--mid);border:1.5px solid var(--border);}
+.btn-ghost:hover{border-color:var(--mi);color:var(--mi);}
+.btn-danger{background:#fef2f2;color:var(--err);border:1.5px solid #fecaca;}
+.btn-danger:hover{background:var(--err);color:#fff;}
+.btn-sm{padding:.38rem .9rem;font-size:.78rem;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:1.3rem;}
+.card-head{padding:1rem 1.4rem;background:linear-gradient(135deg,rgba(232,213,255,.2),rgba(255,229,240,.2));border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:.5rem;flex-wrap:wrap;}
+.card-title{font-family:'Syne',sans-serif;font-size:.95rem;font-weight:700;display:flex;align-items:center;gap:.55rem;}
+.card-body{padding:1.4rem;}
+.fg{margin-bottom:1rem;}
+.fg:last-child{margin-bottom:0;}
+.fg label{display:block;font-size:.72rem;font-weight:700;color:var(--mid);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.4rem;}
+input[type=text],input[type=email],input[type=tel],input[type=url],input[type=password],textarea,select{width:100%;padding:.7rem .95rem;border:1.5px solid var(--border);border-radius:10px;font-family:'Manrope',sans-serif;font-size:.92rem;color:var(--text);background:#fafafa;outline:none;transition:all .2s;}
+input:focus,textarea:focus,select:focus{border-color:var(--mi);background:#fff;box-shadow:0 0 0 3px rgba(166,127,255,.1);}
+textarea{min-height:85px;resize:vertical;line-height:1.6;}
+.hint{font-size:.72rem;color:var(--mid);margin-top:.3rem;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:.9rem;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.9rem;}
+.trow{display:flex;align-items:center;gap:.7rem;margin-bottom:.8rem;}
+.tog{position:relative;width:42px;height:23px;flex-shrink:0;}
+.tog input{opacity:0;width:0;height:0;position:absolute;}
+.tog-sl{position:absolute;inset:0;border-radius:50px;background:#d1d5db;cursor:pointer;transition:.3s;}
+.tog-sl::before{content:'';position:absolute;width:17px;height:17px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.3s;box-shadow:0 1px 4px rgba(0,0,0,.2);}
+.tog input:checked + .tog-sl{background:linear-gradient(135deg,var(--ri),var(--mi));}
+.tog input:checked + .tog-sl::before{transform:translateX(19px);}
+.tog-lbl{font-size:.87rem;font-weight:600;}
+.dyn{display:flex;flex-direction:column;gap:.45rem;margin-bottom:.5rem;}
+.dyn-row{display:flex;gap:.4rem;align-items:center;}
+.dyn-row input{flex:1;}
+.dyn-rm{padding:.62rem .72rem;border:none;border-radius:8px;background:#fef2f2;color:var(--err);cursor:pointer;transition:all .2s;flex-shrink:0;font-size:.9rem;line-height:1;}
+.dyn-rm:hover{background:var(--err);color:#fff;}
+.dyn-add{display:flex;align-items:center;gap:.4rem;padding:.55rem .95rem;border-radius:8px;border:1.5px dashed #c5a3ff;background:none;color:var(--mi);font-family:'Manrope',sans-serif;font-size:.82rem;font-weight:600;cursor:pointer;transition:all .2s;}
+.dyn-add:hover{background:var(--mp);}
+.div{display:flex;align-items:center;gap:.75rem;margin:1rem 0 .85rem;}
+.div span{font-size:.68rem;font-weight:700;color:var(--mid);text-transform:uppercase;letter-spacing:.1em;white-space:nowrap;}
+.div::before,.div::after{content:'';flex:1;height:1px;background:var(--border);}
+.badge{display:inline-flex;align-items:center;gap:.3rem;padding:.2rem .7rem;border-radius:50px;font-size:.72rem;font-weight:700;white-space:nowrap;}
+.badge-ok{background:#f0fdf4;color:var(--ok);}
+.badge-warn{background:#fffbeb;color:var(--warn);}
+.badge-err{background:#fef2f2;color:var(--err);}
+.skel{background:linear-gradient(90deg,var(--border) 25%,var(--mp) 50%,var(--border) 75%);background-size:200% 100%;animation:skelMove 1.5s infinite;border-radius:8px;height:18px;margin-bottom:.5rem;}
+@keyframes skelMove{0%{background-position:200% 0;}100%{background-position:-200% 0;}}
+/* IMAGE UPLOADER */
+.img-uploader{border:2px dashed var(--border);border-radius:12px;overflow:hidden;transition:border-color .2s;background:#fafafa;}
+.img-uploader.drag-over{border-color:var(--mi);background:var(--mp);}
+.img-drop-label{display:block;padding:1.4rem;text-align:center;cursor:pointer;}
+.img-drop-label input[type=file]{display:none;}
+.img-drop-icon{font-size:2rem;margin-bottom:.4rem;opacity:.5;pointer-events:none;}
+.img-drop-text{font-size:.8rem;color:var(--mid);font-weight:500;pointer-events:none;}
+.img-drop-text b{color:var(--mi);}
+.img-drop-text small{display:block;font-size:.7rem;margin-top:.2rem;}
+.img-preview-wrap{display:none;position:relative;overflow:hidden;border-radius:0;}
+.img-preview-wrap.show{display:block;}
+.img-preview-wrap img{width:100%;height:180px;object-fit:contain;display:block;background:#f0eaff;}
+.img-preview-overlay{position:absolute;inset:0;background:rgba(18,16,30,.55);display:flex;align-items:center;justify-content:center;gap:.6rem;opacity:0;transition:opacity .2s;}
+.img-preview-wrap:hover .img-preview-overlay{opacity:1;}
+.img-progress{height:4px;background:var(--border);}
+.img-progress-bar{height:100%;background:linear-gradient(90deg,var(--ri),var(--mi));width:0%;transition:width .3s;}
+.img-status{padding:.5rem .9rem;font-size:.75rem;font-weight:600;display:none;align-items:center;gap:.4rem;border-top:1px solid var(--border);background:#fff;}
+.img-status.show{display:flex;}
+/* Barra con enlace a Drive */
+.img-saved-url{display:none;align-items:center;gap:.5rem;padding:.5rem .9rem;font-size:.73rem;background:#f0fdf4;border-top:1px solid #bbf7d0;color:#166534;flex-wrap:wrap;}
+.img-saved-url.show{display:flex;}
+.img-saved-url a{color:#15803d;text-decoration:underline;word-break:break-all;}
+/* Placeholder cuando Drive bloquea la imagen */
+.img-blocked-ph{padding:1rem;text-align:center;font-size:.78rem;color:var(--mid);background:#f5f2ff;border-radius:0;}
+/* PREVIEW BOX */
+.preview-box{border:1.5px solid var(--border);border-radius:12px;overflow:hidden;}
+.pb-head{padding:1rem 1.2rem;background:linear-gradient(135deg,var(--ri),var(--mi));color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:.95rem;}
+.pb-body{padding:1.2rem;background:#fff;font-size:.88rem;line-height:1.65;}
+.pb-body img{width:100%;max-height:160px;object-fit:cover;border-radius:8px;margin-bottom:.8rem;display:block;}
+.pb-badge{display:inline-block;background:linear-gradient(135deg,var(--ri),var(--mi));color:#fff;font-size:.7rem;font-weight:700;padding:.2rem .65rem;border-radius:50px;margin-bottom:.6rem;text-transform:uppercase;}
+.pb-section{font-weight:700;color:var(--mi);background:linear-gradient(135deg,var(--rp),var(--mp));padding:.4rem .8rem;border-radius:7px;margin:.7rem 0 .45rem;display:block;font-size:.82rem;}
+.pb-cta{display:block;text-align:center;background:linear-gradient(135deg,var(--ri),var(--mi));color:#fff;padding:.65rem;border-radius:50px;font-weight:700;font-size:.85rem;text-decoration:none;margin-top:.8rem;}
+.utbl{width:100%;border-collapse:collapse;font-size:.87rem;}
+.utbl th{padding:.6rem .9rem;text-align:left;font-size:.7rem;color:var(--mid);text-transform:uppercase;letter-spacing:.08em;border-bottom:2px solid var(--border);}
+.utbl td{padding:.8rem .9rem;border-bottom:1px solid var(--border);vertical-align:middle;}
+.utbl tr:last-child td{border-bottom:none;}
+.utbl tr:hover td{background:var(--bg);}
+.role-chip{padding:.2rem .65rem;border-radius:50px;font-size:.72rem;font-weight:700;}
+.role-admin{background:rgba(166,127,255,.15);color:var(--mi);}
+.role-editor{background:rgba(255,133,192,.15);color:var(--ri);}
+.role-viewer{background:rgba(90,85,112,.1);color:var(--mid);}
+.status-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:.3rem;vertical-align:middle;}
+.toasts{position:fixed;bottom:1.5rem;right:1.5rem;display:flex;flex-direction:column;gap:.55rem;z-index:9000;pointer-events:none;}
+.toast{background:var(--dark2);color:#fff;padding:.8rem 1.3rem;border-radius:12px;font-size:.85rem;font-weight:600;display:flex;align-items:center;gap:.6rem;box-shadow:0 8px 28px rgba(0,0,0,.3);max-width:320px;animation:toastIn .3s ease;pointer-events:auto;}
+@keyframes toastIn{from{opacity:0;transform:translateX(50px);}to{opacity:1;transform:none;}}
+.overlay-modal{display:none;position:fixed;inset:0;z-index:5000;background:rgba(18,16,30,.85);backdrop-filter:blur(8px);align-items:center;justify-content:center;}
+.overlay-modal.show{display:flex;}
+.om-box{background:var(--card);border-radius:20px;padding:2rem 1.8rem;width:440px;max-width:95vw;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:cardIn .3s ease;position:relative;max-height:90vh;overflow-y:auto;}
+.om-close{position:absolute;right:1.2rem;top:1.2rem;background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--mid);}
+.om-title{font-family:'Syne',sans-serif;font-size:1.15rem;font-weight:800;color:var(--text);margin-bottom:1.4rem;}
+.strength-bar{height:4px;border-radius:2px;margin-top:.4rem;transition:all .3s;background:var(--border);}
+.info-box{background:linear-gradient(135deg,rgba(166,127,255,.08),rgba(255,133,192,.06));border:1px solid rgba(166,127,255,.2);border-radius:10px;padding:.8rem 1rem;font-size:.82rem;color:var(--mid);margin-bottom:1.2rem;}
+.info-box b{color:var(--mi);}
+@media(max-width:768px){.shell{flex-direction:column;}.sidebar{width:100%;height:auto;position:static;flex-direction:row;overflow-x:auto;padding:.5rem;}.nav-sec{display:none;}.nav-item{padding:.5rem .9rem;border-left:none;border-bottom:3px solid transparent;font-size:.8rem;white-space:nowrap;}.nav-item.on{border-left:none;border-bottom-color:var(--mi);}.g2,.g3{grid-template-columns:1fr;}.main{padding:1rem;}#modal-layout{grid-template-columns:1fr!important;}#modal-preview-col{display:none;}}
+</style>
 </head>
 <body>
 
-<!-- ══ HEADER ══ -->
-<header>
-    <img id="site-logo" src="" alt="Bienestar Emocional" class="logo" style="display:none;" onerror="this.style.display='none'">
-    <h1 id="site-titulo">Bienestar Emocional</h1>
-    <p id="site-subtitulo1">Para Niños, adolescentes, adultos, escuelas y empresas.</p>
-    <p id="site-subtitulo2">Atención clara, Empática y sin juicios</p>
-</header>
-
-<!-- ══ QUIÉNES SOMOS ══ -->
-<div id="quienes-wrap" style="margin:1.5rem auto;max-width:900px;border-radius:24px;overflow:hidden;box-shadow:0 12px 40px rgba(166,127,255,0.25);animation:fadeInUp 0.8s ease-out;animation-delay:0.15s;animation-fill-mode:both;">
-    <div style="position:relative;width:100%;min-height:340px;display:flex;align-items:flex-end;">
-        <img id="quienes-img" src="" alt="Consultorio" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;object-position:center;display:none;" onerror="this.style.display='none'">
-        <!-- Skeleton mientras carga la imagen -->
-        <div id="quienes-img-skel" class="skel" style="position:absolute;top:0;left:0;width:100%;height:100%;"></div>
-        <div style="position:absolute;top:0;left:0;width:100%;height:100%;background:linear-gradient(to top,rgba(45,26,61,0.88) 0%,rgba(45,26,61,0.55) 50%,rgba(45,26,61,0.10) 100%);"></div>
-        <div style="position:relative;z-index:2;padding:2rem 2rem 2.2rem;width:100%;">
-            <h2 id="quienes-titulo" style="font-family:'Outfit',sans-serif;font-size:1.7rem;font-weight:700;color:#FFFFFF;margin-bottom:0.5rem;text-align:left;text-shadow:0 2px 8px rgba(0,0,0,0.3);">¿Quiénes somos?</h2>
-            <div style="width:60px;height:4px;background:linear-gradient(90deg,#FF85C0,#C5A3FF);border-radius:2px;margin-bottom:1rem;"></div>
-            <p id="quienes-texto" style="font-family:'Inter',sans-serif;font-size:0.97rem;color:rgba(255,255,255,0.92);line-height:1.8;text-shadow:0 1px 4px rgba(0,0,0,0.3);max-width:680px;">Cargando...</p>
-        </div>
+<div id="loginScreen">
+  <div class="l-orb l-orb1"></div><div class="l-orb l-orb2"></div>
+  <div class="l-card">
+    <div class="l-head">
+      <div class="l-icon">&#x270F;&#xFE0F;</div>
+      <div class="l-title">Editor de contenido</div>
+      <div class="l-sub">Bienestar Emocional &middot; Acceso restringido</div>
     </div>
+    <div class="l-group">
+      <label class="l-label">Usuario</label>
+      <div class="l-wrap"><span class="l-ico">&#x1F464;</span><input class="l-inp" type="text" id="lu" placeholder="tu usuario" autocomplete="username" onkeydown="if(event.key==='Enter')doLogin()"></div>
+    </div>
+    <div class="l-group">
+      <label class="l-label">Contrasena</label>
+      <div class="l-wrap">
+        <span class="l-ico">&#x1F512;</span>
+        <input class="l-inp" type="password" id="lp" placeholder="&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+        <button class="l-eye" type="button" onclick="togglePwd('lp',this)">&#x1F441;</button>
+      </div>
+    </div>
+    <button class="l-btn" id="lbtn" onclick="doLogin()">Entrar al editor</button>
+    <div class="l-err" id="lerr"></div>
+    <div class="l-att">Intentos restantes: <b id="latt">5</b></div>
+  </div>
 </div>
 
-<!-- ══ HERO ══ -->
-<div class="hero">
-    <h2 id="hero-titulo">En cada uno de nuestros días se presentan</h2>
-    <p id="hero-descripcion">Momentos en los que podemos acompañarte...</p>
-</div>
+<div id="app">
+  <div class="topbar">
+    <div class="tb-l">
+      <div class="tb-logo">&#x270F;&#xFE0F;</div>
+      <div class="tb-brand">Editor <span>Bienestar Emocional</span></div>
+    </div>
+    <div class="tb-r">
+      <div class="uchip">
+        <div class="uav" id="uav">A</div>
+        <div><div class="uname" id="uname">&#x2014;</div><div class="urole" id="urole">&#x2014;</div></div>
+      </div>
+      <button class="btn btn-danger btn-sm" onclick="doLogout()">&#x1F6AA; Salir</button>
+    </div>
+  </div>
 
-<!-- ══ SERVICIOS ══ -->
-<div class="section">
-    <h2>Solicitud de Servicios</h2>
-    <p style="text-align:center;margin-bottom:1.5rem;font-size:1rem;color:var(--texto-medio);">Selecciona el servicio que necesitas</p>
-    <div class="servicios-buttons">
+  <div class="shell">
+    <nav class="sidebar">
+      <div class="nav-sec">Contenido</div>
+      <div class="nav-item on" id="nav-config"       onclick="goTo('config',this)">      <span class="ni">&#x2699;&#xFE0F;</span>Configuracion</div>
+      <div class="nav-item"    id="nav-contacto"     onclick="goTo('contacto',this)">    <span class="ni">&#x1F4DE;</span>Contacto</div>
+      <div class="nav-item"    id="nav-mapa"         onclick="goTo('mapa',this)">        <span class="ni">&#x1F4CD;</span>Mapa</div>
+      <div class="nav-sec">Servicios</div>
+      <div class="nav-item"    id="nav-Empresas"     onclick="goTo('Empresas',this)">    <span class="ni">&#x1F3E2;</span>Empresas</div>
+      <div class="nav-item"    id="nav-Escuelas"     onclick="goTo('Escuelas',this)">    <span class="ni">&#x1F3EB;</span>Escuelas</div>
+      <div class="nav-item"    id="nav-Infantil"     onclick="goTo('Infantil',this)">    <span class="ni">&#x1F476;</span>Ninos y Adolescentes</div>
+      <div class="nav-item"    id="nav-Adultos"      onclick="goTo('Adultos',this)">     <span class="ni">&#x1F471;</span>Adultos</div>
+      <div class="nav-item"    id="nav-Evaluaciones" onclick="goTo('Evaluaciones',this)"><span class="ni">&#x1F9E0;</span>Evaluaciones</div>
+      <div class="nav-sec">Administracion</div>
+      <div class="nav-item"    id="nav-usuarios"     onclick="goTo('usuarios',this)">    <span class="ni">&#x1F465;</span>Usuarios</div>
+    </nav>
 
-        <div class="service-card" onclick="openModal('Empresas')">
-            <img id="card-img-Empresas" src="" alt="Empresas" class="service-card-image" style="display:none;" onerror="this.style.display='none'">
-            <div id="card-img-skel-Empresas" class="skel service-card-image"></div>
-            <div class="service-card-content">
-                <h3 class="service-card-title">🏢 Empresas</h3>
-                <button class="service-card-button">Ver más información</button>
+    <div class="main">
+
+      <!-- CONFIG -->
+      <div class="page on" id="page-config">
+        <div class="card">
+          <div class="card-head">
+            <div class="card-title">&#x2699;&#xFE0F; Configuracion general del sitio</div>
+            <button class="btn btn-primary btn-sm save-btn" onclick="saveTab('Config')">&#x1F4BE; Guardar cambios</button>
+          </div>
+          <div class="card-body">
+            <div id="cfg-loading"><div class="skel" style="height:22px;width:50%;"></div><div class="skel"></div><div class="skel" style="width:80%;"></div></div>
+            <div id="cfg-form" style="display:none;">
+              <div class="div"><span>Header del sitio</span></div>
+              <div class="fg"><label>Titulo principal (H1)</label><input type="text" id="cfg-titulo"></div>
+              <div class="g2">
+                <div class="fg"><label>Subtitulo linea 1</label><input type="text" id="cfg-subtitulo1"></div>
+                <div class="fg"><label>Subtitulo linea 2</label><input type="text" id="cfg-subtitulo2"></div>
+              </div>
+              <div class="fg">
+                <label>Logo del sitio</label>
+                <div class="img-uploader" id="up-logo">
+                  <label class="img-drop-label" id="drop-logo">
+                    <input type="file" id="file-logo" accept="image/jpeg,image/png,image/webp,image/gif">
+                    <div class="img-drop-icon">&#x1F5BC;&#xFE0F;</div>
+                    <div class="img-drop-text"><b>Haz clic aqui</b> para seleccionar el logo<small>JPG, PNG, WEBP &mdash; max. 5 MB</small></div>
+                  </label>
+                  <div class="img-preview-wrap" id="prev-logo">
+                    <img src="" alt="preview logo">
+                    <div class="img-preview-overlay">
+                      <button type="button" class="btn btn-ghost btn-sm" style="background:#fff;" onclick="clearImg('logo')">&#x1F5D1; Quitar</button>
+                      <label class="btn btn-primary btn-sm" style="cursor:pointer;" for="file-logo">&#x1F504; Cambiar</label>
+                    </div>
+                  </div>
+                  <div class="img-progress"><div class="img-progress-bar" id="prog-logo"></div></div>
+                  <div class="img-status" id="stat-logo"></div>
+                  <div class="img-saved-url" id="saved-logo">&#x2705; Guardado en Drive: <a id="saved-logo-link" href="#" target="_blank">Ver archivo</a></div>
+                </div>
+                <input type="hidden" id="cfg-logo_url">
+              </div>
+              <div class="div"><span>Seccion Hero</span></div>
+              <div class="fg"><label>Titulo hero</label><input type="text" id="cfg-hero_titulo"></div>
+              <div class="fg"><label>Descripcion hero</label><textarea id="cfg-hero_descripcion"></textarea></div>
+              <div class="div"><span>Quienes somos</span></div>
+              <div class="fg"><label>Titulo</label><input type="text" id="cfg-quienes_titulo"></div>
+              <div class="fg"><label>Texto</label><textarea id="cfg-quienes_texto" style="min-height:110px;"></textarea></div>
+              <div class="fg">
+                <label>Imagen &mdash; Quienes somos</label>
+                <div class="img-uploader" id="up-quienes">
+                  <label class="img-drop-label" id="drop-quienes">
+                    <input type="file" id="file-quienes" accept="image/jpeg,image/png,image/webp,image/gif">
+                    <div class="img-drop-icon">&#x1F4F8;</div>
+                    <div class="img-drop-text"><b>Haz clic aqui</b> para seleccionar imagen<small>JPG, PNG, WEBP &mdash; max. 5 MB</small></div>
+                  </label>
+                  <div class="img-preview-wrap" id="prev-quienes">
+                    <img src="" alt="preview quienes">
+                    <div class="img-preview-overlay">
+                      <button type="button" class="btn btn-ghost btn-sm" style="background:#fff;" onclick="clearImg('quienes')">&#x1F5D1; Quitar</button>
+                      <label class="btn btn-primary btn-sm" style="cursor:pointer;" for="file-quienes">&#x1F504; Cambiar</label>
+                    </div>
+                  </div>
+                  <div class="img-progress"><div class="img-progress-bar" id="prog-quienes"></div></div>
+                  <div class="img-status" id="stat-quienes"></div>
+                  <div class="img-saved-url" id="saved-quienes">&#x2705; Guardado en Drive: <a id="saved-quienes-link" href="#" target="_blank">Ver archivo</a></div>
+                </div>
+                <input type="hidden" id="cfg-quienes_imagen">
+              </div>
+              <div class="div"><span>Pie de pagina</span></div>
+              <div class="fg"><label>Texto de copyright</label><input type="text" id="cfg-footer_texto"></div>
             </div>
+          </div>
         </div>
+      </div>
 
-        <div class="service-card" onclick="openModal('Escuelas')">
-            <img id="card-img-Escuelas" src="" alt="Escuelas" class="service-card-image" style="display:none;" onerror="this.style.display='none'">
-            <div id="card-img-skel-Escuelas" class="skel service-card-image"></div>
-            <div class="service-card-content">
-                <h3 class="service-card-title">🏫 Escuelas</h3>
-                <button class="service-card-button">Ver más información</button>
+      <!-- CONTACTO -->
+      <div class="page" id="page-contacto">
+        <div class="card">
+          <div class="card-head">
+            <div class="card-title">&#x1F4DE; Contacto &amp; Redes</div>
+            <button class="btn btn-primary btn-sm save-btn" onclick="saveTab('Contacto')">&#x1F4BE; Guardar cambios</button>
+          </div>
+          <div class="card-body">
+            <div id="ctc-loading"><div class="skel" style="height:22px;width:50%;"></div><div class="skel"></div></div>
+            <div id="ctc-form" style="display:none;">
+              <div class="g3">
+                <div class="fg"><label>Telefono / WhatsApp</label><input type="tel" id="ctc-telefono" placeholder="4425839311"><div class="hint">Solo numeros, sin espacios.</div></div>
+                <div class="fg"><label>Correo electronico</label><input type="email" id="ctc-correo"></div>
+                <div class="fg"><label>Horario de atencion</label><input type="text" id="ctc-horario"></div>
+              </div>
+              <div class="div"><span>Redes sociales</span></div>
+              <div class="g2">
+                <div class="fg"><label>URL Facebook</label><input type="url" id="ctc-facebook"></div>
+                <div class="fg"><label>URL Instagram</label><input type="url" id="ctc-instagram"></div>
+              </div>
+              <div class="div"><span>WhatsApp</span></div>
+              <div class="fg"><label>Mensaje inicial de WhatsApp</label><textarea id="ctc-whatsapp_mensaje"></textarea></div>
             </div>
+          </div>
         </div>
+      </div>
 
-        <div class="service-card" onclick="openModal('Infantil')">
-            <img id="card-img-Infantil" src="" alt="Niños y Adolescentes" class="service-card-image" style="display:none;" onerror="this.style.display='none'">
-            <div id="card-img-skel-Infantil" class="skel service-card-image"></div>
-            <div class="service-card-content">
-                <h3 class="service-card-title">👶 Niños y Adolescentes</h3>
-                <button class="service-card-button">Ver más información</button>
-            </div>
-        </div>
+      <!-- MAPA -->
+      <div class="page" id="page-mapa">
+        <div class="card">
+          <div class="card-head">
+            <div class="card-title">&#x1F4CD; Ubicacion &amp; Mapa</div>
+            <button class="btn btn-primary btn-sm save-btn" onclick="saveTab('Mapa')">&#x1F4BE; Guardar cambios</button>
+          </div>
+          <div class="card-body">
+            <div id="map-loading"><div class="skel" style="height:22px;width:50%;"></div><div class="skel"></div></div>
+            <div id="map-form" style="display:none;">
 
-        <div class="service-card" onclick="openModal('Adultos')">
-            <img id="card-img-Adultos" src="" alt="Adultos" class="service-card-image" style="display:none;" onerror="this.style.display='none'">
-            <div id="card-img-skel-Adultos" class="skel service-card-image"></div>
-            <div class="service-card-content">
-                <h3 class="service-card-title">👨‍🦱 Adultos</h3>
-                <button class="service-card-button">Ver más información</button>
-            </div>
-        </div>
+              <!-- INSTRUCCION -->
+              <div style="background:linear-gradient(135deg,rgba(166,127,255,.08),rgba(255,133,192,.06));border:1px solid rgba(166,127,255,.25);border-radius:12px;padding:1rem 1.1rem;margin-bottom:1.2rem;">
+                <div style="font-weight:700;font-size:.85rem;margin-bottom:.55rem;">&#x1F4CD; Como obtener tus coordenadas</div>
+                <ol style="padding-left:1.3rem;font-size:.81rem;color:var(--mid);line-height:2;">
+                  <li>Abre <b>Google Maps</b> en tu celular o PC</li>
+                  <li>Busca tu consultorio / lugar en el mapa</li>
+                  <li>Manten presionado el punto exacto en el mapa</li>
+                  <li>Aparece un chip en la parte inferior, ejemplo: <b>20.5818, -100.4177</b></li>
+                  <li>Copia esos dos numeros y pegalos abajo</li>
+                </ol>
+              </div>
 
-        <div class="service-card" onclick="openModal('Evaluaciones')" style="grid-column:1/-1;max-width:420px;margin:0 auto;width:100%;">
-            <img id="card-img-Evaluaciones" src="" alt="Evaluaciones" class="service-card-image" style="display:none;" onerror="this.style.display='none'">
-            <div id="card-img-skel-Evaluaciones" class="skel service-card-image"></div>
-            <div class="service-card-content">
-                <div class="badge-eval" id="eval-badge" style="display:none;">Nuevo</div>
-                <h3 class="service-card-title">🧠 Evaluaciones Especializadas</h3>
-                <button class="service-card-button">Ver más información</button>
+              <div class="div"><span>Coordenadas (obligatorio)</span></div>
+              <div class="g2">
+                <div class="fg">
+                  <label>Latitud</label>
+                  <input type="text" id="map-latitud" placeholder="20.581839" oninput="buildEmbedFromCoords()">
+                  <div class="hint">Primer numero &mdash; ej: <b>20.581839</b></div>
+                </div>
+                <div class="fg">
+                  <label>Longitud</label>
+                  <input type="text" id="map-longitud" placeholder="-100.417727" oninput="buildEmbedFromCoords()">
+                  <div class="hint">Segundo numero (negativo en Mexico) &mdash; ej: <b>-100.417727</b></div>
+                </div>
+              </div>
+
+              <!-- Vista previa del mapa -->
+              <div id="map-coords-preview" style="display:none;margin-bottom:1.2rem;border:1.5px solid var(--border);border-radius:12px;overflow:hidden;">
+                <div style="padding:.55rem 1rem;background:linear-gradient(135deg,rgba(232,213,255,.2),rgba(255,229,240,.2));font-size:.74rem;font-weight:700;color:var(--mid);border-bottom:1px solid var(--border);">&#x1F5FA; Vista previa</div>
+                <iframe id="map-iframe" src="" width="100%" height="260" style="display:block;border:none;" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe>
+              </div>
+
+              <div class="div"><span>Boton de direcciones</span></div>
+              <div class="fg"><label>Texto del boton</label><input type="text" id="map-boton_texto" placeholder="Como llegar aqui"></div>
+
+              <div class="div"><span>Avanzado &mdash; src embed manual</span></div>
+              <div class="fg">
+                <label>src del iframe <span style="font-weight:400;color:var(--mid);text-transform:none;font-size:.72rem;">(si no usas coordenadas)</span></label>
+                <textarea id="map-embed_url" style="min-height:55px;font-family:var(--mono);font-size:.78rem;" oninput="previewMapEmbed()"></textarea>
+                <div class="hint">Google Maps &rarr; Compartir &rarr; <b>Insertar mapa</b> &rarr; copia solo el valor de <code>src="..."</code></div>
+              </div>
+              <input type="hidden" id="map-link_directo">
             </div>
+          </div>
         </div>
+      </div>
+
+      <!-- MODAL EDITOR -->
+      <div class="page" id="page-modal">
+        <div class="card">
+          <div class="card-head">
+            <div class="card-title" id="modal-card-title">&#x1F3E2; Servicio</div>
+            <div style="display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;">
+              <span class="badge badge-warn" id="modal-status">Sin cargar</span>
+              <button class="btn btn-ghost btn-sm" onclick="loadCurrentModal()">&#x21BA; Recargar</button>
+              <button class="btn btn-primary btn-sm save-btn" onclick="saveCurrentModal()">&#x1F4BE; Guardar cambios</button>
+            </div>
+          </div>
+          <div class="card-body">
+            <div id="modal-loading" style="padding:2rem 0;">
+              <div class="skel" style="height:22px;width:60%;margin-bottom:1rem;"></div>
+              <div class="skel"></div><div class="skel" style="width:90%;"></div><div class="skel" style="width:75%;"></div>
+            </div>
+            <div id="modal-form" style="display:none;">
+              <div id="modal-layout" style="display:grid;grid-template-columns:1fr 320px;gap:1.4rem;align-items:start;">
+                <div>
+                  <div class="div"><span>Informacion general</span></div>
+                  <div class="fg"><label>Titulo del modal</label><input type="text" id="m-titulo" oninput="updatePreview()"></div>
+                  <div class="fg"><label>Introduccion / descripcion</label><textarea id="m-intro" style="min-height:100px;" oninput="updatePreview()"></textarea></div>
+                  <div class="fg">
+                    <label>Imagen del servicio</label>
+                    <div class="img-uploader" id="up-modal">
+                      <label class="img-drop-label" id="drop-modal">
+                        <input type="file" id="file-modal" accept="image/jpeg,image/png,image/webp,image/gif">
+                        <div class="img-drop-icon">&#x1F4F7;</div>
+                        <div class="img-drop-text"><b>Haz clic aqui</b> para seleccionar imagen<small>JPG, PNG, WEBP &mdash; max. 5 MB</small></div>
+                      </label>
+                      <div class="img-preview-wrap" id="prev-modal">
+                        <img src="" alt="preview modal">
+                        <div class="img-preview-overlay">
+                          <button type="button" class="btn btn-ghost btn-sm" style="background:#fff;" onclick="clearImg('modal')">&#x1F5D1; Quitar</button>
+                          <label class="btn btn-primary btn-sm" style="cursor:pointer;" for="file-modal">&#x1F504; Cambiar</label>
+                        </div>
+                      </div>
+                      <div class="img-progress"><div class="img-progress-bar" id="prog-modal"></div></div>
+                      <div class="img-status" id="stat-modal"></div>
+                      <div class="img-saved-url" id="saved-modal">&#x2705; Guardado en Drive: <a id="saved-modal-link" href="#" target="_blank">Ver archivo</a></div>
+                    </div>
+                    <input type="hidden" id="m-imagen">
+                  </div>
+                  <div class="fg"><label>Badge (vacio para ocultar)</label><input type="text" id="m-badge" placeholder="Ej: Nuevo" oninput="updatePreview()"></div>
+                  <div class="div"><span>Servicios ofrecidos</span></div>
+                  <div class="fg"><label>Titulo de la seccion</label><input type="text" id="m-servicios_titulo" oninput="updatePreview()" placeholder="Nuestros servicios:"></div>
+                  <div class="dyn" id="m-svc-list"></div>
+                  <button class="dyn-add" type="button" onclick="addDynItem('svc')">+ Agregar servicio</button>
+                  <div class="div" style="margin-top:1.2rem;"><span>Temas / areas</span></div>
+                  <div class="fg"><label>Titulo de la seccion</label><input type="text" id="m-temas_titulo" oninput="updatePreview()" placeholder="Temas que abordamos:"></div>
+                  <div class="dyn" id="m-tema-list"></div>
+                  <button class="dyn-add" type="button" onclick="addDynItem('tema')">+ Agregar tema</button>
+                  <div class="div" style="margin-top:1.2rem;"><span>CTA &amp; Modalidad</span></div>
+                  <div class="g2">
+                    <div class="fg"><label>Texto del boton</label><input type="text" id="m-cta_texto" oninput="updatePreview()" placeholder="Contactar"></div>
+                    <div class="fg"><label>URL del boton</label><input type="url" id="m-cta_url" placeholder="https://wa.me/..."></div>
+                  </div>
+                  <div class="fg"><label>Modalidad de atencion</label><input type="text" id="m-modalidad" placeholder="Presencial y en linea"></div>
+                </div>
+                <div id="modal-preview-col" style="position:sticky;top:80px;">
+                  <div class="card" style="margin-bottom:0;">
+                    <div class="card-head" style="padding:.7rem 1rem;"><div class="card-title" style="font-size:.82rem;">&#x1F441; Vista previa</div></div>
+                    <div class="card-body" style="padding:.8rem;">
+                      <div class="preview-box">
+                        <div class="pb-head" id="pv-head">Titulo</div>
+                        <div class="pb-body" id="pv-body"><p style="color:var(--mid);font-size:.83rem;">Completa los campos para ver la vista previa.</p></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- USUARIOS -->
+      <div class="page" id="page-usuarios">
+        <div class="card">
+          <div class="card-head">
+            <div class="card-title">&#x1F465; Usuarios del editor</div>
+            <button class="btn btn-primary btn-sm" onclick="openUserModal()">+ Nuevo usuario</button>
+          </div>
+          <div class="card-body">
+            <div class="info-box">Roles: <b>Administrador</b> (acceso total), <b>Editor</b> (editar contenido), <b>Visor</b> (solo lectura).</div>
+            <div id="users-loading"><div class="skel"></div><div class="skel" style="width:80%;"></div></div>
+            <div id="users-table" style="display:none;overflow-x:auto;"></div>
+          </div>
+        </div>
+      </div>
 
     </div>
+  </div>
 </div>
 
-<!-- MODAL DINÁMICO -->
-<div id="modalDinamico" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="cerrarModal()">&times;</span>
-        <div id="modalCuerpo">
-            <div class="modal-loading">
-                <div class="spinner"></div>
-                <p>Cargando información...</p>
-            </div>
-        </div>
+<!-- MODAL USUARIO -->
+<div class="overlay-modal" id="userModal">
+  <div class="om-box">
+    <button class="om-close" onclick="closeUserModal()">&#x2715;</button>
+    <div class="om-title" id="um-title">&#x1F464; Nuevo usuario</div>
+    <input type="hidden" id="um-idx">
+    <div class="fg"><label>Nombre completo</label><input type="text" id="um-nombre" placeholder="Ej. Ana Garcia"></div>
+    <div class="fg">
+      <label>Login (usuario)</label>
+      <input type="text" id="um-login" placeholder="Ej. ana.garcia" autocomplete="off">
+      <div class="hint">Solo letras, numeros y punto. Sin espacios.</div>
     </div>
-</div>
-
-<!-- ══ MAPA ══ -->
-<div class="mapa-wrap">
-    <iframe id="mapa-iframe" src="" allowfullscreen="" loading="lazy"></iframe>
-    <div class="mapa-footer">
-        <h3>Cómo llegar</h3>
-        <p>Haz clic abajo para ver indicaciones en Google Maps.</p>
-        <a id="mapa-btn" href="#" target="_blank" class="mapa-btn">Cómo llegar aquí →</a>
+    <div class="fg">
+      <label>Contrasena <span id="um-pass-opt" style="font-weight:400;color:var(--mid);text-transform:none;font-size:.78rem;"></span></label>
+      <div style="position:relative;">
+        <input type="password" id="um-pass" placeholder="Minimo 8 caracteres" autocomplete="new-password" oninput="checkPassStrength()">
+        <button type="button" onclick="togglePwd('um-pass',this)" style="position:absolute;right:.8rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:.95rem;color:var(--mid);">&#x1F441;</button>
+      </div>
+      <div class="strength-bar" id="str-bar"></div>
+      <div class="hint" id="um-strength"></div>
     </div>
-</div>
-
-<!-- ══ CONTACTO ══ -->
-<div class="contacto-wrap">
-    <h2 style="font-family:'Outfit',sans-serif;">Contacto</h2>
-    <div class="contacto-grid">
-        <div class="contacto-item">
-            <strong>📞 Teléfono</strong>
-            <a id="ctc-tel-link" href="tel:4425839311">442 583 9311</a>
-        </div>
-        <div class="contacto-item">
-            <strong>📧 Correo</strong>
-            <a id="ctc-email-link" href="mailto:Bienestaremocional58@gmail.com">Bienestaremocional58@gmail.com</a>
-        </div>
-        <div class="contacto-item">
-            <strong>🕐 Horario</strong>
-            <p id="ctc-horario-txt">12:00 pm a 6:00 pm</p>
-        </div>
+    <div class="fg">
+      <label>Rol</label>
+      <select id="um-rol">
+        <option value="admin">Administrador - acceso total</option>
+        <option value="editor" selected>Editor - editar contenido</option>
+        <option value="viewer">Visor - solo lectura</option>
+      </select>
     </div>
-</div>
-
-<!-- ══ REDES SOCIALES ══ -->
-<div class="social-links">
-    <a id="link-facebook" href="#" target="_blank">📘 Facebook</a>
-    <a id="link-instagram" href="#" target="_blank">📷 Instagram</a>
-</div>
-
-<!-- ══ FOOTER ══ -->
-<footer>
-    <p id="footer-texto">&copy; 2025 Bienestar Emocional. Todos los derechos reservados.</p>
-</footer>
-
-<!-- ══ BOTONES FLOTANTES ══ -->
-<div class="floating-buttons">
-    <button class="share-float" onclick="openShareModal()" aria-label="Compartir">
-        <svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg>
-    </button>
-    <a id="wa-float-link" href="#" class="whatsapp-float" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
-        <svg viewBox="0 0 32 32"><path d="M16 0C7.164 0 0 7.164 0 16c0 2.825.738 5.607 2.137 8.058L.069 31.488l7.695-2.01A15.87 15.87 0 0016 32c8.836 0 16-7.164 16-16S24.836 0 16 0zm8.28 22.663c-.36.981-2.106 1.8-2.898 1.92-.77.12-1.588.173-2.564-.165a23.726 23.726 0 01-2.322-.857c-4.08-1.77-6.736-5.93-6.944-6.204-.208-.273-1.705-2.292-1.705-4.374 0-2.082 1.073-3.104 1.456-3.527.384-.423.837-.53 1.116-.53.28 0 .558.003.803.015.26.013.606-.098.95.723.344.82 1.174 2.903 1.278 3.115.104.212.173.46.034.733-.139.273-.208.442-.415.681-.207.24-.435.535-.621.72-.207.205-.422.427-.182.838.24.41 1.07 1.782 2.298 2.888 1.58 1.423 2.912 1.868 3.327 2.08.415.212.657.177.9-.107.243-.284.953-1.13 1.208-1.518.254-.39.508-.325.86-.195.35.13 2.23 1.062 2.612 1.255.383.192.638.287.734.445.096.158.096.915-.264 1.896z"/></svg>
-    </a>
-</div>
-
-<!-- ══ SHARE MODAL ══ -->
-<div id="shareModal" class="share-modal">
-    <div class="share-modal-content">
-        <span class="close" onclick="closeShareModal()">&times;</span>
-        <h3>📤 Compartir Página</h3>
-        <div class="share-options">
-            <button class="share-option" onclick="shareWhatsApp()">
-                <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-                WhatsApp
-            </button>
-            <button class="share-option" onclick="shareEmail()">
-                <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
-                Email
-            </button>
-            <button class="share-option" onclick="copyLink()">
-                <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
-                Copiar Link
-            </button>
-            <button class="share-option" onclick="generateQR()">
-                <svg viewBox="0 0 24 24"><path d="M3 11h8V3H3v8zm2-6h4v4H5V5zM3 21h8v-8H3v8zm2-6h4v4H5v-4zM13 3v8h8V3h-8zm6 6h-4V5h4v4zM13 13h2v2h-2zM15 15h2v2h-2zM13 17h2v2h-2zM15 19h2v2h-2zM17 17h2v2h-2zM17 13h2v2h-2zM19 15h2v2h-2zM19 19h2v2h-2z"/></svg>
-                Código QR
-            </button>
-        </div>
-        <div id="qrCode"></div>
+    <div class="trow">
+      <label class="tog"><input type="checkbox" id="um-activo" checked><span class="tog-sl"></span></label>
+      <span class="tog-lbl">Usuario activo</span>
     </div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:.5rem;" onclick="saveUser()">&#x1F4BE; Guardar usuario</button>
+  </div>
 </div>
+
+<div class="toasts" id="toasts"></div>
 
 <script>
-// ════════════════════════════════════════════════════
-//  ⚠️  URL del Apps Script desplegado
-// ════════════════════════════════════════════════════
-var PROXY_URL = 'https://script.google.com/macros/s/AKfycby3EJ4UQy5-V3cLrFzeT3BtOsUf0hnGAHlDpZPpkmTuJ3RcByEyWcBRks6tPj_HbUy9/exec';
-var SITE_URL  = 'https://bienestaremocionalwepapp-code.github.io/Bienestar-Emocional-Online/';
+'use strict';
+// ══════════════════════════════════════════════════════
+//  CONFIGURACION - cambia esta URL al redesplegar el GAS
+// ══════════════════════════════════════════════════════
+var PROXY = 'https://script.google.com/macros/s/AKfycbw33rJe4JWLUnSHYuRuf4x_FW90YKMA-i2PEHXCoJwqYmUcih90NVV9JpUe_i0jrQli/exec';
 
-var cache = {};
+var MAX_ATT=5, INACT_MS=20*60*1000;
+var MODAL_TABS=['Empresas','Escuelas','Infantil','Adultos','Evaluaciones'];
+var MODAL_EMOJI={Empresas:'&#x1F3E2;',Escuelas:'&#x1F3EB;',Infantil:'&#x1F476;',Adultos:'&#x1F471;',Evaluaciones:'&#x1F9E0;'};
+var attempts=MAX_ATT, currentUser=null, inactTimer=null, currentTab='config', usersData=[], saving=false;
 
-// ── Fetch genérico ──────────────────────────────────
-function fetchTab(tab) {
-    if (cache[tab]) return Promise.resolve(cache[tab]);
-    return fetch(PROXY_URL + '?tab=' + encodeURIComponent(tab), { redirect:'follow' })
-        .then(function(r){ return r.text(); })
-        .then(function(t){
-            var j = JSON.parse(t);
-            if (!j.ok) throw new Error(j.error || 'Error');
-            cache[tab] = j.data;
-            return j.data;
-        });
+// ═══ API ═══
+function apiGet(tab){
+  return fetch(PROXY+'?tab='+encodeURIComponent(tab),{redirect:'follow'})
+    .then(function(r){return r.text();})
+    .then(function(t){var j=JSON.parse(t);if(!j.ok)throw new Error(j.error||'Error');return j.data;});
+}
+function apiPost(tab,data){
+  return fetch(PROXY,{method:'POST',redirect:'follow',headers:{'Content-Type':'text/plain'},
+    body:JSON.stringify({tab:tab,data:data})})
+    .then(function(r){return r.text();})
+    .then(function(t){var j=JSON.parse(t);if(!j.ok)throw new Error(j.error||'Error al guardar');return j;});
 }
 
-// ════════════════════════════════════════════════════
-//  CARGAR TODAS LAS SECCIONES AL INICIO
-// ════════════════════════════════════════════════════
-document.addEventListener('DOMContentLoaded', function() {
-    loadConfig();
-    loadContacto();
-    loadMapa();
-    preloadServiceImages();
+// ═══ SUBIDA DE IMAGENES v4 ═══
+// Google Drive 2024: las URLs publicas a veces no cargan en <img>.
+// Estrategia: blob local inmediato -> lh3.googleusercontent.com/d/<id>
+// Si falla: drive.google.com/thumbnail -> uc?export=view
+// El editor siempre guarda la URL lh3 en el Sheet.
+
+var UPLOADERS = {
+  'logo'   :{ hidden:'cfg-logo_url',       uploader:'up-logo',    preview:'prev-logo',    file:'file-logo',    savedBar:'saved-logo',    savedLink:'saved-logo-link' },
+  'quienes':{ hidden:'cfg-quienes_imagen', uploader:'up-quienes', preview:'prev-quienes', file:'file-quienes', savedBar:'saved-quienes', savedLink:'saved-quienes-link' },
+  'modal'  :{ hidden:'m-imagen',           uploader:'up-modal',   preview:'prev-modal',   file:'file-modal',   savedBar:'saved-modal',   savedLink:'saved-modal-link' }
+};
+
+function extractFileId(url){
+  if(!url)return null;
+  var m;
+  m=url.match(/googleusercontent\.com\/d\/([a-zA-Z0-9_-]+)/);if(m)return m[1];
+  m=url.match(/[?&]id=([a-zA-Z0-9_-]+)/);if(m)return m[1];
+  m=url.match(/\/d\/([a-zA-Z0-9_-]+)\//);if(m)return m[1];
+  m=url.match(/thumbnail\?id=([a-zA-Z0-9_-]+)/);if(m)return m[1];
+  return null;
+}
+
+// Aplica imagen con fallback encadenado (lh3 -> thumbnail -> uc)
+function setImgWithFallback(imgEl, fileId, blobSrc){
+  if(!imgEl)return;
+  var fallbacks = blobSrc ? [blobSrc] : [];
+  if(fileId){
+    if(!blobSrc) fallbacks.push('https://lh3.googleusercontent.com/d/'+fileId);
+    fallbacks.push('https://drive.google.com/thumbnail?id='+fileId+'&sz=w800');
+    fallbacks.push('https://drive.google.com/uc?export=view&id='+fileId);
+  }
+  var tried=0;
+  imgEl.onerror=function(){
+    tried++;
+    if(tried<fallbacks.length){ imgEl.src=fallbacks[tried]; }
+    else {
+      imgEl.onerror=null; imgEl.style.display='none';
+      if(!imgEl.parentNode.querySelector('.img-blocked-ph')){
+        var ph=document.createElement('div'); ph.className='img-blocked-ph';
+        ph.innerHTML='&#x1F5BC; Imagen guardada en Drive<br><small>Vista previa no disponible (politica de Google).<br>Se mostrara correctamente en tu sitio web.</small>';
+        imgEl.parentNode.insertBefore(ph,imgEl.nextSibling);
+      }
+    }
+  };
+  imgEl.style.display='';
+  imgEl.src=fallbacks[0]||'';
+}
+
+document.addEventListener('DOMContentLoaded',function(){
+  Object.keys(UPLOADERS).forEach(function(key){
+    var cfg=UPLOADERS[key];
+    var fi=document.getElementById(cfg.file);
+    if(fi) fi.addEventListener('change',function(){ handleFileSelect(this,key); });
+    var up=document.getElementById(cfg.uploader);
+    if(up){
+      up.addEventListener('dragover', function(e){e.preventDefault();up.classList.add('drag-over');});
+      up.addEventListener('dragleave',function(){up.classList.remove('drag-over');});
+      up.addEventListener('drop',function(e){
+        e.preventDefault();up.classList.remove('drag-over');
+        var f=e.dataTransfer.files[0];if(f)processFile(f,key);
+      });
+    }
+  });
 });
 
-// ── Config (header + quiénes somos + hero + footer) ─
-function loadConfig() {
-    fetchTab('Config').then(function(d) {
-        // Header
-        setTxt('site-titulo',    d.titulo);
-        setTxt('site-subtitulo1',d.subtitulo1);
-        setTxt('site-subtitulo2',d.subtitulo2);
-
-        // Logo
-        if (d.logo_url) {
-            var logo = document.getElementById('site-logo');
-            logo.src = d.logo_url;
-            logo.style.display = 'block';
-        }
-
-        // Quiénes somos
-        setTxt('quienes-titulo', d.quienes_titulo);
-        setTxt('quienes-texto',  d.quienes_texto);
-        if (d.quienes_imagen) {
-            var img  = document.getElementById('quienes-img');
-            var skel = document.getElementById('quienes-img-skel');
-            img.src = d.quienes_imagen;
-            img.onload = function(){ img.style.display='block'; skel.style.display='none'; };
-            img.onerror= function(){ skel.style.display='none'; };
-        } else {
-            document.getElementById('quienes-img-skel').style.display = 'none';
-        }
-
-        // Hero
-        setTxt('hero-titulo',      d.hero_titulo);
-        setTxt('hero-descripcion', d.hero_descripcion);
-
-        // Footer
-        setTxt('footer-texto', '\u00A9 ' + d.footer_texto);
-
-    }).catch(function(e){ console.warn('Config no cargó:', e.message); });
+function handleFileSelect(input,key){
+  var file=input.files&&input.files[0];
+  if(!file)return;
+  processFile(file,key);
+  input.value='';
 }
 
-// ── Contacto ────────────────────────────────────────
-function loadContacto() {
-    fetchTab('Contacto').then(function(d) {
-        // Teléfono
-        if (d.telefono) {
-            var tel = document.getElementById('ctc-tel-link');
-            tel.href = 'tel:' + d.telefono;
-            tel.textContent = d.telefono.replace(/(\d{3})(\d{3})(\d{4})/, '$1 $2 $3');
-        }
-        // Correo
-        if (d.correo) {
-            var mail = document.getElementById('ctc-email-link');
-            mail.href = 'mailto:' + d.correo;
-            mail.textContent = d.correo;
-        }
-        // Horario
-        setTxt('ctc-horario-txt', d.horario);
+function processFile(file,key){
+  var allowed=['image/jpeg','image/png','image/webp','image/gif'];
+  if(allowed.indexOf(file.type)===-1){toast('Tipo no permitido. Usa JPG, PNG o WEBP.','err');return;}
+  if(file.size>5*1024*1024){toast('La imagen supera 5 MB.','err');return;}
 
-        // Redes sociales
-        if (d.facebook)  { var fb = document.getElementById('link-facebook');  fb.href = d.facebook; }
-        if (d.instagram) { var ig = document.getElementById('link-instagram'); ig.href = d.instagram; }
+  // Preview blob local inmediato
+  var blobUrl=URL.createObjectURL(file);
+  _showPreviewBlob(key,blobUrl);
+  setProgress(key,15);
+  setStatus(key,'uploading','');
 
-        // WhatsApp flotante
-        if (d.telefono) {
-            var msg = encodeURIComponent(d.whatsapp_mensaje || 'Hola, me gustaría obtener información sobre sus servicios');
-            document.getElementById('wa-float-link').href = 'https://wa.me/' + d.telefono + '?text=' + msg;
-        }
-    }).catch(function(e){ console.warn('Contacto no cargó:', e.message); });
-}
+  apiUpload(file)
+    .then(function(res){
+      var fileId=res.fileId||'';
+      var storedUrl='https://lh3.googleusercontent.com/d/'+fileId;
+      document.getElementById(UPLOADERS[key].hidden).value=storedUrl;
 
-// ── Mapa ─────────────────────────────────────────────
-function loadMapa() {
-    fetchTab('Mapa').then(function(d) {
-        if (d.embed_url) {
-            document.getElementById('mapa-iframe').src = d.embed_url;
-        }
-        if (d.latitud && d.longitud) {
-            var btn = document.getElementById('mapa-btn');
-            btn.href = 'https://www.google.com/maps/dir/?api=1&destination=' + d.latitud + ',' + d.longitud + '&travelmode=driving';
-            btn.textContent = d.boton_texto || 'Cómo llegar aquí →';
-        }
-    }).catch(function(e){ console.warn('Mapa no cargó:', e.message); });
-}
+      // Reemplazar blob por URL Drive con fallback
+      var prevWrap=document.getElementById(UPLOADERS[key].preview);
+      var imgEl=prevWrap?prevWrap.querySelector('img'):null;
+      if(imgEl){
+        URL.revokeObjectURL(blobUrl);
+        setImgWithFallback(imgEl, fileId, null);
+      }
 
-// ── Pre-cargar imágenes de las tarjetas de servicio ──
-function preloadServiceImages() {
-    var tabs = ['Empresas','Escuelas','Infantil','Adultos','Evaluaciones'];
-    tabs.forEach(function(tab) {
-        fetchTab(tab).then(function(d) {
-            cache[tab] = d; // guardar en caché para el modal
+      // Chip con enlace
+      var driveLink=res.driveUrl||('https://drive.google.com/file/d/'+fileId+'/view');
+      showSavedBar(key,driveLink);
 
-            var imgEl  = document.getElementById('card-img-' + tab);
-            var skelEl = document.getElementById('card-img-skel-' + tab);
-
-            if (d.imagen && imgEl) {
-                imgEl.src = d.imagen;
-                imgEl.onload  = function(){ imgEl.style.display='block'; if(skelEl)skelEl.style.display='none'; };
-                imgEl.onerror = function(){ if(skelEl)skelEl.style.display='none'; };
-            } else {
-                if (skelEl) skelEl.style.display = 'none';
-            }
-
-            // Badge de Evaluaciones
-            if (tab === 'Evaluaciones' && d.badge) {
-                var b = document.getElementById('eval-badge');
-                b.textContent = d.badge;
-                b.style.display = 'inline-block';
-            }
-        }).catch(function(e){ console.warn(tab + ' no cargó:', e.message); });
+      setProgress(key,100);
+      setStatus(key,'ok','Imagen subida a Drive');
+      if(key==='modal')updatePreview();
+      toast('Imagen subida correctamente','ok');
+      setTimeout(function(){setProgress(key,0);},2500);
+    })
+    .catch(function(err){
+      setStatus(key,'err','Error: '+err.message);
+      setProgress(key,0);
+      toast('Error al subir: '+err.message,'err');
+      clearImg(key);
     });
 }
 
-// ════════════════════════════════════════════════════
-//  MODAL DINÁMICO
-// ════════════════════════════════════════════════════
-function openModal(pestana) {
-    var modal  = document.getElementById('modalDinamico');
-    var cuerpo = document.getElementById('modalCuerpo');
-    cuerpo.innerHTML = '<div class="modal-loading"><div class="spinner"></div><p>Cargando información...</p></div>';
-    modal.style.display = 'block';
-    document.body.style.overflow = 'hidden';
-
-    fetchTab(pestana)
-        .then(function(data){ cuerpo.innerHTML = buildModalHTML(data); })
-        .catch(function(err){
-            cuerpo.innerHTML = '<p style="color:red;text-align:center;">⚠️ No se pudo cargar la información.</p>';
-            console.error(err);
-        });
+function apiUpload(file){
+  return new Promise(function(resolve,reject){
+    var reader=new FileReader();
+    reader.onload=function(e){
+      var parts=e.target.result.split(',');
+      fetch(PROXY,{method:'POST',redirect:'follow',headers:{'Content-Type':'text/plain'},
+        body:JSON.stringify({action:'upload',filename:file.name.replace(/[^a-zA-Z0-9._-]/g,'_'),
+          mimeType:file.type||'image/jpeg',base64:parts[1]})})
+      .then(function(r){return r.text();})
+      .then(function(t){var j=JSON.parse(t);if(!j.ok)reject(new Error(j.error||'Error al subir'));else resolve(j);})
+      .catch(reject);
+    };
+    reader.onerror=function(){reject(new Error('No se pudo leer el archivo'));};
+    reader.readAsDataURL(file);
+  });
 }
 
-function buildModalHTML(d) {
-    var servicios = [], temas = [], i = 1;
-    while (d['servicio_' + i]) { servicios.push(d['servicio_' + i]); i++; }
-    i = 1;
-    while (d['tema_' + i]) { temas.push(d['tema_' + i]); i++; }
-
-    var esEval = temas.some(function(t){ return t.indexOf('Personalidad') > -1 || t.indexOf('Conducta') > -1; });
-
-    var temasHTML = esEval
-        ? '<div class="eval-areas-grid">' + temas.map(function(t){ return '<div class="eval-area-item">' + t + '</div>'; }).join('') + '</div>'
-        : '<ul>' + temas.map(function(t){ return '<li>' + t + '</li>'; }).join('') + '</ul>';
-
-    return (d.imagen ? '<img src="' + d.imagen + '" alt="" class="modal-image" onerror="this.style.display=\'none\'">' : '')
-        + (d.badge   ? '<div style="margin-bottom:.7rem;"><span class="badge-eval">' + d.badge + '</span></div>' : '')
-        + '<h3>' + (d.titulo || '') + '</h3>'
-        + '<p>' + (d.intro || '') + '</p>'
-        + (servicios.length ? '<span class="modal-section-label">' + (d.servicios_titulo || 'Servicios:') + '</span><ul>' + servicios.map(function(s){ return '<li>' + s + '</li>'; }).join('') + '</ul>' : '')
-        + (temas.length     ? '<span class="modal-section-label">' + (d.temas_titulo || 'Temas:') + '</span>' + temasHTML : '')
-        + (d.modalidad      ? '<p><strong>Modalidad:</strong> ' + d.modalidad + '</p>' : '')
-        + '<a href="' + (d.cta_url || '#') + '" target="_blank" class="cta-button">' + (d.cta_texto || 'Contactar') + '</a>';
+function _showPreviewBlob(key,blobUrl){
+  var cfg=UPLOADERS[key];
+  var prevWrap=document.getElementById(cfg.preview);
+  var imgEl=prevWrap.querySelector('img');
+  imgEl.onerror=null; imgEl.style.display=''; imgEl.src=blobUrl;
+  prevWrap.classList.add('show');
+  var lbl=document.querySelector('#'+cfg.uploader+' .img-drop-label');
+  if(lbl)lbl.style.display='none';
+  // limpiar placeholder si habia
+  var ph=prevWrap.querySelector('.img-blocked-ph');if(ph)ph.remove();
 }
 
-function cerrarModal() {
-    document.getElementById('modalDinamico').style.display = 'none';
-    document.body.style.overflow = 'auto';
+function clearImg(key){
+  var cfg=UPLOADERS[key];
+  document.getElementById(cfg.hidden).value='';
+  var prevWrap=document.getElementById(cfg.preview);
+  prevWrap.classList.remove('show');
+  var imgEl=prevWrap.querySelector('img');
+  if(imgEl){imgEl.src='';imgEl.onerror=null;imgEl.style.display='';}
+  var ph=prevWrap.querySelector('.img-blocked-ph');if(ph)ph.remove();
+  var lbl=document.querySelector('#'+cfg.uploader+' .img-drop-label');
+  if(lbl)lbl.style.display='';
+  hideSavedBar(key);
+  setStatus(key,'none','');
+  setProgress(key,0);
+  if(key==='modal')updatePreview();
 }
 
-// ════════════════════════════════════════════════════
-//  COMPARTIR
-// ════════════════════════════════════════════════════
-function openShareModal()  { document.getElementById('shareModal').style.display='block'; document.getElementById('qrCode').style.display='none'; document.getElementById('qrCode').innerHTML=''; }
-function closeShareModal() { document.getElementById('shareModal').style.display='none'; }
-function shareWhatsApp()   { window.open('https://wa.me/?text=' + encodeURIComponent('Conoce Bienestar Emocional - Servicios de psicología profesional ' + SITE_URL),'_blank'); }
-function shareEmail()      { window.location.href = 'mailto:?subject=' + encodeURIComponent('Te comparto: Bienestar Emocional') + '&body=' + encodeURIComponent('Hola,\n\nTe comparto este enlace:\n\n' + SITE_URL + '\n\n¡Saludos!'); }
-function copyLink()        { navigator.clipboard ? navigator.clipboard.writeText(SITE_URL).then(function(){ alert('✅ Enlace copiado'); }) : (function(){ var t=document.createElement('textarea'); t.value=SITE_URL; document.body.appendChild(t); t.select(); document.execCommand('copy'); document.body.removeChild(t); alert('✅ Enlace copiado'); })(); }
-function generateQR() {
-    var q = document.getElementById('qrCode');
-    q.innerHTML = '<p style="margin-bottom:1rem;color:var(--morado-intenso);font-weight:600;">Escanea el código QR:</p>';
-    q.style.display = 'block';
-    var d = document.createElement('div'); q.appendChild(d);
-    new QRCode(d, { text:SITE_URL, width:200, height:200, colorDark:'#000000', colorLight:'#FFFFFF', correctLevel:QRCode.CorrectLevel.H });
+function preloadImg(key,url){
+  if(!url)return;
+  var cfg=UPLOADERS[key];
+  if(!cfg)return;
+  document.getElementById(cfg.hidden).value=url;
+  var fileId=extractFileId(url);
+  var prevWrap=document.getElementById(cfg.preview);
+  var imgEl=prevWrap?prevWrap.querySelector('img'):null;
+  prevWrap.classList.add('show');
+  var lbl=document.querySelector('#'+cfg.uploader+' .img-drop-label');
+  if(lbl)lbl.style.display='none';
+  var ph=prevWrap?prevWrap.querySelector('.img-blocked-ph'):null;if(ph)ph.remove();
+  setImgWithFallback(imgEl, fileId, fileId?null:url);
+  var driveLink=fileId?('https://drive.google.com/file/d/'+fileId+'/view'):url;
+  showSavedBar(key,driveLink);
+  setStatus(key,'ok','Imagen cargada desde Drive');
 }
 
-// ════════════════════════════════════════════════════
-//  EVENTOS GLOBALES
-// ════════════════════════════════════════════════════
-window.onclick = function(e) {
-    if (e.target.id === 'modalDinamico') cerrarModal();
-    if (e.target.classList.contains('share-modal')) closeShareModal();
-};
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') { cerrarModal(); closeShareModal(); }
-});
-
-// ── Utilidad ─────────────────────────────────────────
-function setTxt(id, val) {
-    var el = document.getElementById(id);
-    if (el && val) el.textContent = val;
+function showSavedBar(key,driveUrl){
+  var cfg=UPLOADERS[key];
+  var bar=document.getElementById(cfg.savedBar);
+  var link=document.getElementById(cfg.savedLink);
+  if(bar&&link){link.href=driveUrl||'#';bar.classList.add('show');}
 }
+function hideSavedBar(key){
+  var cfg=UPLOADERS[key];
+  var bar=document.getElementById(cfg.savedBar);
+  if(bar)bar.classList.remove('show');
+}
+function setProgress(key,pct){var bar=document.getElementById('prog-'+key);if(bar)bar.style.width=pct+'%';}
+function setStatus(key,type,msg){
+  var el=document.getElementById('stat-'+key);if(!el)return;
+  el.classList.remove('show');
+  if(type==='uploading'){
+    el.innerHTML='<span class="spin" style="border-color:rgba(166,127,255,.3);border-top-color:var(--mi);width:14px;height:14px;border-width:2px;"></span> Subiendo a Drive...';
+    el.style.color='var(--mi)';el.classList.add('show');
+  }else if(type==='ok'){el.textContent=msg;el.style.color='var(--ok)';el.classList.add('show');}
+  else if(type==='err'){el.textContent=msg;el.style.color='var(--err)';el.classList.add('show');}
+}
+
+// ═══ AUTH ═══
+function doLogin(){
+  var lu=document.getElementById('lu').value.trim();
+  var lp=document.getElementById('lp').value;
+  var btn=document.getElementById('lbtn');
+  if(!lu||!lp){showLErr('Completa usuario y contrasena.');return;}
+  var lock=parseInt(sessionStorage.getItem('be_lock')||'0');
+  if(Date.now()<lock){showLErr('Bloqueado '+Math.ceil((lock-Date.now())/60000)+' min mas.');return;}
+  btn.disabled=true;btn.innerHTML='<span class="spin"></span> Verificando...';
+  apiGet('Usuarios').then(function(data){
+    var users=parseUsers(data);
+    var user=users.find(function(u){return u.login===lu&&u.pass===lp&&u.activo==='true';});
+    if(user){
+      attempts=MAX_ATT;sessionStorage.removeItem('be_lock');currentUser=user;
+      sessionStorage.setItem('be_sess',JSON.stringify({login:user.login,nombre:user.nombre,rol:user.rol,ts:Date.now()}));
+      launchApp(user);
+    }else{
+      attempts--;document.getElementById('latt').textContent=attempts;
+      ['lu','lp'].forEach(function(id){var el=document.getElementById(id);el.classList.add('bad');setTimeout(function(){el.classList.remove('bad');},700);});
+      if(attempts<=0){sessionStorage.setItem('be_lock',Date.now()+5*60*1000);attempts=MAX_ATT;showLErr('Demasiados intentos. Bloqueado 5 minutos.');}
+      else showLErr('Usuario o contrasena incorrectos.');
+      btn.disabled=false;btn.innerHTML='Entrar al editor';
+    }
+  }).catch(function(err){showLErr('Error de conexion: '+err.message);btn.disabled=false;btn.innerHTML='Entrar al editor';});
+}
+function parseUsers(data){
+  var users=[],i=1;
+  while(data['login_'+i]!==undefined){
+    if(data['login_'+i])users.push({idx:i,login:data['login_'+i]||'',pass:data['pass_'+i]||'',nombre:data['nombre_'+i]||'',rol:data['rol_'+i]||'editor',activo:data['activo_'+i]||'false'});
+    i++;
+  }
+  return users;
+}
+function showLErr(m){var e=document.getElementById('lerr');e.textContent=m;e.classList.remove('show');void e.offsetWidth;e.classList.add('show');}
+function launchApp(user){
+  document.getElementById('loginScreen').classList.add('hidden');
+  document.getElementById('app').classList.add('on');
+  document.getElementById('uav').textContent=user.nombre.charAt(0).toUpperCase();
+  document.getElementById('uname').textContent=user.nombre;
+  document.getElementById('urole').textContent=({admin:'Administrador',editor:'Editor',viewer:'Visor'})[user.rol]||user.rol;
+  applyRoleUI(user.rol);
+  goTo('config',document.getElementById('nav-config'));
+  resetInact();
+  document.addEventListener('mousemove',resetInact);
+  document.addEventListener('keydown',resetInact);
+}
+function applyRoleUI(rol){
+  var uNav=document.getElementById('nav-usuarios');
+  if(uNav)uNav.style.display=(rol==='admin')?'':'none';
+  if(rol==='viewer')document.querySelectorAll('.save-btn').forEach(function(b){b.style.display='none';});
+}
+function doLogout(){
+  if(!confirm('Cerrar sesion?'))return;
+  clearTimeout(inactTimer);currentUser=null;sessionStorage.removeItem('be_sess');
+  document.removeEventListener('mousemove',resetInact);document.removeEventListener('keydown',resetInact);
+  document.getElementById('loginScreen').classList.remove('hidden');document.getElementById('app').classList.remove('on');
+  var btn=document.getElementById('lbtn');btn.disabled=false;btn.innerHTML='Entrar al editor';
+  document.getElementById('lerr').classList.remove('show');
+  document.getElementById('lu').value='';document.getElementById('lp').value='';
+  document.getElementById('latt').textContent=MAX_ATT;attempts=MAX_ATT;
+}
+function resetInact(){clearTimeout(inactTimer);inactTimer=setTimeout(function(){toast('Sesion cerrada por inactividad','warn');doLogout();},INACT_MS);}
+function togglePwd(id,btn){var inp=document.getElementById(id);inp.type=inp.type==='password'?'text':'password';btn.textContent=inp.type==='password'?'ver':'ocultar';}
+(function(){try{var s=JSON.parse(sessionStorage.getItem('be_sess'));if(s&&(Date.now()-s.ts)<INACT_MS){currentUser={login:s.login,nombre:s.nombre,rol:s.rol};launchApp(currentUser);}}catch(e){}})();
+
+// ═══ NAVEGACION ═══
+function goTo(name,el){
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('on');});
+  document.querySelectorAll('.nav-item').forEach(function(n){n.classList.remove('on');});
+  if(el)el.classList.add('on');
+  if(MODAL_TABS.indexOf(name)!==-1){
+    currentTab=name;
+    document.getElementById('page-modal').classList.add('on');
+    document.getElementById('modal-card-title').textContent=(MODAL_EMOJI[name]||'')+' '+name;
+    loadCurrentModal();
+  }else{
+    document.getElementById('page-'+name).classList.add('on');
+    loadPage(name);
+  }
+}
+function loadPage(name){
+  if(name==='config')  loadTab('Config',  fillConfig,  'cfg');
+  if(name==='contacto')loadTab('Contacto',fillContacto,'ctc');
+  if(name==='mapa')    loadTab('Mapa',    fillMapa,    'map');
+  if(name==='usuarios')loadUsersPage();
+}
+
+// ═══ LOADERS / SAVERS ═══
+function loadTab(tab,fillFn,prefix){
+  var sk=document.getElementById(prefix+'-loading'),fm=document.getElementById(prefix+'-form');
+  if(sk)sk.style.display='block';if(fm)fm.style.display='none';
+  apiGet(tab).then(function(data){fillFn(data);if(sk)sk.style.display='none';if(fm)fm.style.display='block';})
+    .catch(function(e){toast('Error al cargar '+tab+': '+e.message,'err');if(sk)sk.style.display='none';if(fm)fm.style.display='block';});
+}
+function saveTab(tab){
+  if(saving)return;
+  if(currentUser&&currentUser.rol==='viewer'){toast('Los visores no pueden guardar.','warn');return;}
+  var data=collectTab(tab);if(!data)return;
+  saving=true;
+  apiPost(tab,data).then(function(){toast(tab+' guardado','ok');}).catch(function(e){toast('Error: '+e.message,'err');}).finally(function(){saving=false;});
+}
+function collectTab(tab){
+  if(tab==='Config')  return collectConfig();
+  if(tab==='Contacto')return collectContacto();
+  if(tab==='Mapa')    return collectMapa();
+  return null;
+}
+function fillConfig(d){
+  sv('cfg-titulo',d.titulo);sv('cfg-subtitulo1',d.subtitulo1);sv('cfg-subtitulo2',d.subtitulo2);
+  sv('cfg-hero_titulo',d.hero_titulo);sv('cfg-hero_descripcion',d.hero_descripcion);
+  sv('cfg-quienes_titulo',d.quienes_titulo);sv('cfg-quienes_texto',d.quienes_texto);
+  sv('cfg-footer_texto',d.footer_texto);
+  clearImg('logo');clearImg('quienes');
+  preloadImg('logo',d.logo_url);preloadImg('quienes',d.quienes_imagen);
+}
+function collectConfig(){
+  return{titulo:gv('cfg-titulo'),subtitulo1:gv('cfg-subtitulo1'),subtitulo2:gv('cfg-subtitulo2'),
+    logo_url:gv('cfg-logo_url'),hero_titulo:gv('cfg-hero_titulo'),hero_descripcion:gv('cfg-hero_descripcion'),
+    quienes_titulo:gv('cfg-quienes_titulo'),quienes_texto:gv('cfg-quienes_texto'),
+    quienes_imagen:gv('cfg-quienes_imagen'),footer_texto:gv('cfg-footer_texto')};
+}
+function fillContacto(d){sv('ctc-telefono',d.telefono);sv('ctc-correo',d.correo);sv('ctc-horario',d.horario);sv('ctc-facebook',d.facebook);sv('ctc-instagram',d.instagram);sv('ctc-whatsapp_mensaje',d.whatsapp_mensaje);}
+function collectContacto(){return{telefono:gv('ctc-telefono'),correo:gv('ctc-correo'),horario:gv('ctc-horario'),facebook:gv('ctc-facebook'),instagram:gv('ctc-instagram'),whatsapp_mensaje:gv('ctc-whatsapp_mensaje')};}
+function fillMapa(d){
+  sv('map-latitud',d.latitud);
+  sv('map-longitud',d.longitud);
+  sv('map-embed_url',d.embed_url||'');
+  sv('map-boton_texto',d.boton_texto);
+  sv('map-link_directo',d.link_directo||'');
+  // Mostrar preview: coordenadas primero, luego embed manual
+  if(d.latitud && d.longitud){ buildEmbedFromCoords(); }
+  else if(d.embed_url){ previewMapEmbed(); }
+}
+function collectMapa(){
+  return{
+    latitud:gv('map-latitud'), longitud:gv('map-longitud'),
+    embed_url:gv('map-embed_url'), boton_texto:gv('map-boton_texto'),
+    link_directo:gv('map-link_directo')
+  };
+}
+
+// Genera el src embed desde latitud/longitud y actualiza el iframe
+function buildEmbedFromCoords(){
+  var lat=gv('map-latitud'), lng=gv('map-longitud');
+  var preview=document.getElementById('map-coords-preview');
+  var iframe=document.getElementById('map-iframe');
+  // Validar que sean numeros validos
+  var latN=parseFloat(lat), lngN=parseFloat(lng);
+  if(isNaN(latN)||isNaN(lngN)||!lat||!lng){
+    if(preview)preview.style.display='none';
+    return;
+  }
+  // URL embed directa con coordenadas — no requiere API key
+  var src='https://maps.google.com/maps?q='+latN+','+lngN+'&z=17&output=embed';
+  if(iframe) iframe.src=src;
+  if(preview) preview.style.display='block';
+  // Guardar en el campo embed_url para persistir
+  sv('map-embed_url', src);
+}
+
+function previewMapEmbed(){
+  var src=gv('map-embed_url');
+  var preview=document.getElementById('map-coords-preview');
+  var iframe=document.getElementById('map-iframe');
+  if(!src){ if(preview)preview.style.display='none'; return; }
+  if(iframe) iframe.src=src;
+  if(preview) preview.style.display='block';
+}
+
+// Funciones legacy que ya no se usan (las dejamos vacias para no romper nada)
+function previewMapLink(){}
+function linkToEmbedSrc(l){return '';}
+function extractCoordsFromLink(){}
+
+
+// ═══ MODAL EDITOR ═══
+function loadCurrentModal(){
+  document.getElementById('modal-loading').style.display='block';
+  document.getElementById('modal-form').style.display='none';
+  setModalStatus('Cargando...','warn');
+  apiGet(currentTab).then(function(data){
+    fillModalForm(data);
+    document.getElementById('modal-loading').style.display='none';
+    document.getElementById('modal-form').style.display='block';
+    setModalStatus('Cargado','ok');
+    updatePreview();
+  }).catch(function(e){
+    document.getElementById('modal-loading').style.display='none';
+    setModalStatus('Error','err');
+    toast('Error al cargar '+currentTab+': '+e.message,'err');
+  });
+}
+function setModalStatus(text,type){var el=document.getElementById('modal-status');el.textContent=text;el.className='badge badge-'+type;}
+function fillModalForm(d){
+  sv('m-titulo',d.titulo);sv('m-intro',d.intro);sv('m-badge',d.badge);
+  sv('m-servicios_titulo',d.servicios_titulo);sv('m-temas_titulo',d.temas_titulo);
+  sv('m-cta_texto',d.cta_texto);sv('m-cta_url',d.cta_url);sv('m-modalidad',d.modalidad);
+  clearImg('modal');preloadImg('modal',d.imagen);
+  var svcs=[],i=1;while(d['servicio_'+i]!==undefined){if(d['servicio_'+i])svcs.push(d['servicio_'+i]);i++;}
+  renderDynList('m-svc-list',svcs,'svc');
+  var temas=[];i=1;while(d['tema_'+i]!==undefined){if(d['tema_'+i])temas.push(d['tema_'+i]);i++;}
+  renderDynList('m-tema-list',temas,'tema');
+}
+function renderDynList(cid,items,type){var c=document.getElementById(cid);c.innerHTML='';items.forEach(function(v){c.appendChild(makeDynRow(v,type));});}
+function makeDynRow(val,type){
+  var row=document.createElement('div');row.className='dyn-row';
+  var inp=document.createElement('input');inp.type='text';inp.value=val||'';inp.addEventListener('input',updatePreview);
+  var rm=document.createElement('button');rm.className='dyn-rm';rm.type='button';rm.textContent='x';
+  rm.addEventListener('click',function(){row.remove();updatePreview();});
+  row.appendChild(inp);row.appendChild(rm);return row;
+}
+function addDynItem(type){document.getElementById(type==='svc'?'m-svc-list':'m-tema-list').appendChild(makeDynRow('',type));}
+function collectModalData(){
+  var data={titulo:gv('m-titulo'),intro:gv('m-intro'),imagen:gv('m-imagen'),badge:gv('m-badge'),
+    servicios_titulo:gv('m-servicios_titulo'),temas_titulo:gv('m-temas_titulo'),
+    cta_texto:gv('m-cta_texto'),cta_url:gv('m-cta_url'),modalidad:gv('m-modalidad')};
+  for(var n=1;n<=20;n++){data['servicio_'+n]='';data['tema_'+n]='';}
+  document.querySelectorAll('#m-svc-list input').forEach(function(inp,i){var v=inp.value.trim();if(v)data['servicio_'+(i+1)]=v;});
+  document.querySelectorAll('#m-tema-list input').forEach(function(inp,i){var v=inp.value.trim();if(v)data['tema_'+(i+1)]=v;});
+  return data;
+}
+function saveCurrentModal(){
+  if(saving)return;
+  if(currentUser&&currentUser.rol==='viewer'){toast('Los visores no pueden guardar.','warn');return;}
+  saving=true;setModalStatus('Guardando...','warn');
+  apiPost(currentTab,collectModalData())
+    .then(function(){setModalStatus('Guardado','ok');toast(currentTab+' guardado','ok');})
+    .catch(function(e){setModalStatus('Error','err');toast('Error: '+e.message,'err');})
+    .finally(function(){saving=false;});
+}
+function updatePreview(){
+  var titulo=gv('m-titulo')||'Titulo',intro=gv('m-intro')||'',imagen=gv('m-imagen')||'';
+  var badge=gv('m-badge')||'',ctaTxt=gv('m-cta_texto')||'Contactar',ctaUrl=gv('m-cta_url')||'#';
+  var svcTit=gv('m-servicios_titulo')||'Nuestros servicios:',temaTit=gv('m-temas_titulo')||'Temas:';
+  var isEval=currentTab==='Evaluaciones';
+  var svcs=Array.from(document.querySelectorAll('#m-svc-list input')).map(function(i){return i.value.trim();}).filter(Boolean);
+  var temas=Array.from(document.querySelectorAll('#m-tema-list input')).map(function(i){return i.value.trim();}).filter(Boolean);
+  var temasHTML=isEval
+    ?'<div style="display:grid;grid-template-columns:1fr 1fr;gap:.3rem;">'+temas.map(function(t){return'<div style="background:var(--mp);border-radius:6px;padding:.3rem .55rem;font-size:.73rem;font-weight:600;color:var(--mi);border-left:3px solid var(--mi);">'+esc(t)+'</div>';}).join('')+'</div>'
+    :'<ul style="padding-left:1.2rem;">'+temas.map(function(t){return'<li style="margin-bottom:.2rem;font-size:.82rem;">'+esc(t)+'</li>';}).join('')+'</ul>';
+  document.getElementById('pv-head').textContent=titulo;
+  var imgHtml='';
+  if(imagen){
+    var fid=extractFileId(imagen);
+    var pvSrc=fid?('https://lh3.googleusercontent.com/d/'+fid):imagen;
+    imgHtml='<img src="'+esc(pvSrc)+'" style="width:100%;max-height:160px;object-fit:cover;border-radius:8px;margin-bottom:.8rem;display:block;" onerror="this.style.display=\'none\'">';
+  }
+  document.getElementById('pv-body').innerHTML=
+    imgHtml
+    +(badge?'<span class="pb-badge">'+esc(badge)+'</span>':'')
+    +(intro?'<p style="font-size:.83rem;margin-bottom:.5rem;">'+esc(intro)+'</p>':'')
+    +(svcs.length?'<span class="pb-section">'+esc(svcTit)+'</span><ul style="padding-left:1.2rem;">'+svcs.map(function(s){return'<li style="margin-bottom:.2rem;font-size:.82rem;">'+esc(s)+'</li>';}).join('')+'</ul>':'')
+    +(temas.length?'<span class="pb-section">'+esc(temaTit)+'</span>'+temasHTML:'')
+    +'<a href="'+esc(ctaUrl)+'" class="pb-cta" target="_blank">'+esc(ctaTxt)+'</a>';
+}
+
+// ═══ USUARIOS ═══
+function loadUsersPage(){
+  document.getElementById('users-loading').style.display='block';
+  document.getElementById('users-table').style.display='none';
+  apiGet('Usuarios').then(function(data){
+    usersData=parseUsers(data);renderUsersTable();
+    document.getElementById('users-loading').style.display='none';
+    document.getElementById('users-table').style.display='block';
+  }).catch(function(e){toast('Error al cargar usuarios: '+e.message,'err');document.getElementById('users-loading').style.display='none';});
+}
+function renderUsersTable(){
+  var rL={admin:'Administrador',editor:'Editor',viewer:'Visor'};
+  var rC={admin:'role-admin',editor:'role-editor',viewer:'role-viewer'};
+  var html='<table class="utbl"><thead><tr><th>Nombre</th><th>Login</th><th>Rol</th><th>Estado</th><th style="text-align:right;">Acciones</th></tr></thead><tbody>';
+  if(!usersData.length)html+='<tr><td colspan="5" style="text-align:center;color:var(--mid);padding:2rem;">No hay usuarios.</td></tr>';
+  usersData.forEach(function(u){
+    var isMe=currentUser&&currentUser.login===u.login,isActive=u.activo==='true';
+    html+='<tr><td><div style="display:flex;align-items:center;gap:.6rem;"><div style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--ri),var(--mi));display:flex;align-items:center;justify-content:center;color:#fff;font-size:.8rem;font-weight:700;flex-shrink:0;">'+esc(u.nombre.charAt(0).toUpperCase())+'</div><span style="font-weight:600;">'+esc(u.nombre)+(isMe?' (tu)':'')+'</span></div></td>'
+      +'<td style="font-family:var(--mono);font-size:.82rem;color:var(--mid);">'+esc(u.login)+'</td>'
+      +'<td><span class="role-chip '+(rC[u.rol]||'')+'">'+( rL[u.rol]||u.rol)+'</span></td>'
+      +'<td><span class="status-dot" style="background:'+(isActive?'var(--ok)':'#d1d5db')+'"></span>'+(isActive?'Activo':'Inactivo')+'</td>'
+      +'<td><div style="display:flex;gap:.4rem;justify-content:flex-end;"><button class="btn btn-ghost btn-sm" onclick="editUser('+u.idx+')">Editar</button>'
+      +(!isMe?'<button class="btn btn-danger btn-sm" onclick="toggleUserActive('+u.idx+','+isActive+')">'+(isActive?'Desactivar':'Activar')+'</button>':'')
+      +'</div></td></tr>';
+  });
+  html+='</tbody></table>';
+  document.getElementById('users-table').innerHTML=html;
+}
+function openUserModal(){
+  ['um-idx','um-nombre','um-login','um-pass'].forEach(function(id){document.getElementById(id).value='';});
+  document.getElementById('um-rol').value='editor';document.getElementById('um-activo').checked=true;
+  document.getElementById('um-pass-opt').textContent='';document.getElementById('um-title').textContent='Nuevo usuario';
+  document.getElementById('um-strength').textContent='';document.getElementById('str-bar').style.width='0';
+  document.getElementById('um-pass').type='password';document.getElementById('userModal').classList.add('show');
+}
+function editUser(idx){
+  var u=usersData.find(function(u){return u.idx===idx;});if(!u)return;
+  document.getElementById('um-title').textContent='Editar: '+u.nombre;
+  document.getElementById('um-idx').value=idx;document.getElementById('um-nombre').value=u.nombre;
+  document.getElementById('um-login').value=u.login;document.getElementById('um-pass').value='';
+  document.getElementById('um-rol').value=u.rol;document.getElementById('um-activo').checked=u.activo==='true';
+  document.getElementById('um-pass-opt').textContent='dejar vacio para no cambiar';
+  document.getElementById('um-strength').textContent='';document.getElementById('str-bar').style.width='0';
+  document.getElementById('um-pass').type='password';document.getElementById('userModal').classList.add('show');
+}
+function closeUserModal(){document.getElementById('userModal').classList.remove('show');}
+function saveUser(){
+  var idx=document.getElementById('um-idx').value,nombre=document.getElementById('um-nombre').value.trim();
+  var login=document.getElementById('um-login').value.trim(),pass=document.getElementById('um-pass').value;
+  var rol=document.getElementById('um-rol').value,activo=document.getElementById('um-activo').checked?'true':'false';
+  if(!nombre){toast('El nombre es obligatorio.','err');return;}
+  if(!login){toast('El login es obligatorio.','err');return;}
+  if(!/^[\w.]+$/.test(login)){toast('Login invalido: solo letras, numeros y punto.','err');return;}
+  if(!idx&&!pass){toast('La contrasena es obligatoria para nuevos usuarios.','err');return;}
+  if(pass&&pass.length<8){toast('La contrasena debe tener minimo 8 caracteres.','err');return;}
+  var dup=usersData.find(function(u){return u.login===login&&String(u.idx)!==String(idx);});
+  if(dup){toast('Ya existe un usuario con ese login.','err');return;}
+  var userIdx=idx?parseInt(idx):(usersData.length>0?Math.max.apply(null,usersData.map(function(u){return u.idx;}))+1:1);
+  var sd={};sd['login_'+userIdx]=login;sd['nombre_'+userIdx]=nombre;sd['rol_'+userIdx]=rol;sd['activo_'+userIdx]=activo;
+  if(pass)sd['pass_'+userIdx]=pass;
+  apiPost('Usuarios',sd).then(function(){closeUserModal();toast('Usuario guardado.','ok');loadUsersPage();}).catch(function(e){toast('Error: '+e.message,'err');});
+}
+function toggleUserActive(idx,currently){
+  var u=usersData.find(function(u){return u.idx===idx;});if(!u)return;
+  if(!confirm((currently?'Desactivar':'Activar')+' al usuario "'+u.nombre+'"?'))return;
+  var d={};d['activo_'+idx]=currently?'false':'true';
+  apiPost('Usuarios',d).then(function(){toast('Usuario '+(currently?'desactivado':'activado')+'.','warn');loadUsersPage();}).catch(function(e){toast('Error: '+e.message,'err');});
+}
+function checkPassStrength(){
+  var pass=document.getElementById('um-pass').value,hint=document.getElementById('um-strength'),bar=document.getElementById('str-bar');
+  if(!pass){hint.textContent='';bar.style.width='0';return;}
+  var score=0;
+  if(pass.length>=8)score++;if(pass.length>=12)score++;
+  if(/[A-Z]/.test(pass))score++;if(/[0-9]/.test(pass))score++;if(/[^a-zA-Z0-9]/.test(pass))score++;
+  var labels=['','Muy debil','Debil','Regular','Fuerte','Muy fuerte'];
+  var colors=['','#ef4444','#f97316','#eab308','#22c55e','#16a34a'];
+  hint.textContent='Seguridad: '+(labels[score]||'');hint.style.color=bar.style.background=colors[score]||'';bar.style.width=(score*20)+'%';
+}
+
+// ═══ UTILS ═══
+function gv(id){var e=document.getElementById(id);return e?e.value.trim():'';}
+function sv(id,val){var e=document.getElementById(id);if(e)e.value=val!=null?val:'';}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
+function toast(msg,type){
+  var c=document.getElementById('toasts'),t=document.createElement('div');t.className='toast';
+  t.style.borderLeft='3px solid '+(type==='ok'?'var(--ok)':type==='err'?'var(--err)':'var(--warn)');
+  t.textContent=msg;c.appendChild(t);
+  setTimeout(function(){t.style.opacity='0';t.style.transform='translateX(50px)';t.style.transition='.3s';setTimeout(function(){t.remove();},350);},3500);
+}
+if(!Promise.prototype.finally){Promise.prototype.finally=function(fn){return this.then(function(v){fn();return v;},function(e){fn();throw e;});};}
 </script>
 </body>
 </html>
