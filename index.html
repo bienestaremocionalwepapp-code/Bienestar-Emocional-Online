@@ -557,11 +557,11 @@ var MESES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','
 //  MAPA DE CONTEXTOS VIRTUALES — variable virtual por modal
 // ════════════════════════════════════════════════════════════
 var CONTEXTO_MODAL = {
-  'Empresas'    : { modal:'Empresa',       emoji:'🏢', tipo:'EMP', label:'Solicitar cotización',   form:'FormularioEmpresa.html'      },
-  'Escuelas'    : { modal:'Escuela',       emoji:'🏫', tipo:'ESC', label:'Solicitar cotización',   form:'FormularioEscuela.html'      },
-  'Infantil'    : { modal:'Cita Personal', emoji:'🧒', tipo:'PAC', label:'Agendar cita',           form:'FormularioCitaPersonal.html' },
-  'Adultos'     : { modal:'Cita Personal', emoji:'👤', tipo:'PAC', label:'Agendar cita',           form:'FormularioCitaPersonal.html' },
-  'Evaluaciones': { modal:'Cita Personal', emoji:'🧠', tipo:'PAC', label:'Solicitar evaluación',   form:'FormularioCitaPersonal.html' }
+  'Empresas'    : { modal:'Empresa',       emoji:'🏢', tipo:'EMP', label:'Solicitar cotización',   form:'formularioempresa.html'      },
+  'Escuelas'    : { modal:'Escuela',       emoji:'🏫', tipo:'ESC', label:'Solicitar cotización',   form:'formularioescuela.html'      },
+  'Infantil'    : { modal:'Cita Personal', emoji:'🧒', tipo:'PAC', label:'Agendar cita',           form:'formulariocitapersonal.html' },
+  'Adultos'     : { modal:'Cita Personal', emoji:'👤', tipo:'PAC', label:'Agendar cita',           form:'formulariocitapersonal.html' },
+  'Evaluaciones': { modal:'Cita Personal', emoji:'🧠', tipo:'PAC', label:'Solicitar evaluación',   form:'formulariocitapersonal.html' }
 };
 
 // ════════════════════════════════════════════════════════════
@@ -672,7 +672,7 @@ function buildModalHTML(d, pestana) {
 // ── Activa be-welcome con contexto virtual del botón ─────────────
 function abrirBeWelcome(btn) {
     var pestana = btn.dataset.pestana;
-    var ctx = CONTEXTO_MODAL[pestana] || { modal:pestana, emoji:'💜', tipo:'PAC', form:'FormularioCitaPersonal.html' };
+    var ctx = CONTEXTO_MODAL[pestana] || { modal:pestana, emoji:'💜', tipo:'PAC', form:'formulariocitapersonal.html' };
 
     // Guardar contexto activo global
     window.BE_CTX = { pestana:pestana, modal:ctx.modal, emoji:ctx.emoji, tipo:ctx.tipo, form:ctx.form };
@@ -798,7 +798,7 @@ var BE = (function(){
         },
         elegirForm: function(){
             goScreen('be-s-load'); setLoadTxt('Preparando tu formulario…');
-            var ctx=window.BE_CTX||{modal:'Servicio',tipo:'PAC',form:'FormularioCitaPersonal.html'};
+            var ctx=window.BE_CTX||{modal:'Servicio',tipo:'PAC',form:'formulariocitapersonal.html'};
             fetch(PROXY,{ method:'POST', headers:{'Content-Type':'application/json'},
                 body:JSON.stringify({ action:'registrarInteres', data:{ pacienteId:_pacienteId, nombre:_nombre, telefono:_tel, correo:_correo, modal:ctx.modal, opcion:'Llenar Formulario', sesion:_sesion }})
             })
