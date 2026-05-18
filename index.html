@@ -366,13 +366,16 @@
     padding-left: 100%;
     animation: ledPause 60s linear infinite;
 }
+
 @keyframes ledPause {
     0%   { transform: translateX(0); }
-    5%   { transform: translateX(-100%); }
     15%  { transform: translateX(-100%); }
-    20%  { transform: translateX(100%); }
+    30%  { transform: translateX(-100%); }
+    35%  { transform: translateX(100%); }
     100% { transform: translateX(100%); }
 }
+
+        
 .barra-led:hover .texto-led {
     animation-play-state: paused;
     color: #fff;
