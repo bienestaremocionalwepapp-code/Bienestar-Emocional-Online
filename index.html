@@ -336,6 +336,40 @@
             .floating-buttons{bottom:30px;right:30px;}
             .whatsapp-float,.share-float{width:70px;height:70px;}
         }
+
+        /* ═══ BARRA LED ═══ */
+.barra-led {
+    display: block;
+    width: 100%;
+    background: linear-gradient(90deg, #1a0033, #2d004d, #1a0033);
+    color: #0ff;
+    text-align: center;
+    padding: 10px 0;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    overflow: hidden;
+    white-space: nowrap;
+    position: relative;
+    z-index: 9999;
+    box-shadow: 0 0 15px rgba(0,255,255,0.3);
+}
+.texto-led {
+    display: inline-block;
+    animation: ledScroll 14s linear infinite;
+    padding-left: 100%;
+}
+@keyframes ledScroll {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
+}
+.barra-led:hover .texto-led {
+    animation-play-state: paused;
+    color: #fff;
+    text-shadow: 0 0 12px #0ff;
+}
     </style>
 </head>
 <body>
